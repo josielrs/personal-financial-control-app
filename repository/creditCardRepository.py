@@ -18,7 +18,7 @@ def insertCreditCard(name: str,
     create_session().add(newCreditCard)
     create_session().commit
 
-def searchCreditCard(number: int) -> CreditCard:
+def searchCreditCardByNumber(number: int) -> CreditCard:
 
     return create_session().query(CreditCard).filter(CreditCard.number == number).first()
 
@@ -32,7 +32,7 @@ def updateCreditCard(name: str,
                      year: int, 
                      creditFlagId: int) -> None:
     
-    existingCreditCard : CreditCard = searchCreditCard(number)
+    existingCreditCard : CreditCard = searchCreditCardByNumber(number)
     if (not existingCreditCard):
         raise RuntimeError('Credit Card not found with number:'+number)
 

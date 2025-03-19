@@ -1,6 +1,10 @@
-from repository.creditCardFlagRepository import searchAllCreditCardFlag
+from repository.creditCardFlagRepository import searchAllCreditCardFlag as searchAllCreditCardFlagRep
+from repository.creditCardFlagRepository import searchCreditCardFlagById as searchCreditCardFlagByIdRep
 from typing import List
 from model.credit_card_flag import CreditCardFlag
 
-def searchAllCreditCardFlags() -> List[CreditCardFlag]:
-    return searchAllCreditCardFlag()
+def searchAllCreditCardFlag() -> List[CreditCardFlag]:
+    return searchAllCreditCardFlagRep()
+
+def searchCreditCardFlagById(id: int) -> CreditCardFlag:
+    return searchCreditCardFlagByIdRep(id)
