@@ -3,6 +3,7 @@ from repository.creditCardRepository import deleteCreditCard as deleteCreditCard
 from repository.creditCardRepository import updateCreditCard as updateCreditCardRep
 from repository.creditCardRepository import searchCreditCardByNumber as searchCreditCardByNumberRep
 from repository.creditCardRepository import searchAllCreditCard as searchAllCreditCardRep
+from repository.creditCardRepository import searchCreditCardById as searchCreditCardByIdRep
 from service.creditCardFlagService import searchCreditCardFlagById
 from typing import List
 from model.credit_card_flag import CreditCardFlag
@@ -25,6 +26,11 @@ def insertCreditCard(name: str,
 def searchCreditCardByNumber(number: int) -> CreditCard:
 
     return searchCreditCardByNumberRep(number)
+
+
+def searchCreditCardById(id: int) -> CreditCard:
+
+    return searchCreditCardByIdRep(id)
 
 
 def searchAllCreditCard() -> List[CreditCard]:

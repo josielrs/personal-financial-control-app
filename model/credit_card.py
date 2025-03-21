@@ -13,3 +13,4 @@ class CreditCard(Base):
     valid_year_date: int = sa.Column(sa.Numeric(4), nullable=False)
     credit_card_flag_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD_FLAG.ID'), nullable=False)
     credit_card_flag: CreditCardFlag = orm.relationship('CreditCardFlag',lazy='joined')
+    description: str = f'[{'-' if not credit_card_flag else credit_card_flag.name}] - {number}'

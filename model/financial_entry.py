@@ -7,10 +7,17 @@ from model.value_type import ValueType
 from model.financial_entry_category import FinancialEntryCategory
 from model.credit_card import CreditCard
 
+def calculateMonthNumber(d1:date, d2:date) -> int:
+
+    if (not d1 or not d2):
+        return 0
+    
+    return (d2.year - d1.year) * 12 + (d2.month - d1.month)
+
 class FinancialEntry(Base):
     __tablename__: str = 'FINANCIAL_ENTRY'
 
-    id: int = sa.Column(sa.Numeric(16), primary_key=True, autoincrement=True, nullable=False)
+    id: int = sa.Column(sa.Numeric(16), primary_key=True, autoincrement=False, nullable=False)
     name: str = sa.Column(sa.String(256), nullable=False)
 
     entry_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('ENTRY_TYPE.ID'), nullable=False)
@@ -30,5 +37,4 @@ class FinancialEntry(Base):
     credit_card_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD.ID'), nullable=True)
     credit_card: CreditCard = orm.relationship('CreditCard',lazy='joined')
 
-
-
+    month_number: int = calculateMonthNumber(start_date,finish_date)

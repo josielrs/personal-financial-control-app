@@ -2,6 +2,17 @@ from conf.db_session import create_session
 from model.financial_entry import FinancialEntry
 from typing import List
 from datetime import date
+from service.exception.businessRulesException import BusinessRulesException
+
+def getNextTableId() -> int:
+
+    result = create_session().execute(f'SELECT MAX(ID) FROM FINANCIAL_ENTRY')
+    if (result):
+        for elem in result:
+            return elem[0] + 1
+    
+    return 1
+
 
 def insertFinancialEntry(name:str,
                          entryTypeId:int,
@@ -11,9 +22,12 @@ def insertFinancialEntry(name:str,
                          value:float,
                          financialEntryCategoryId:int,
                          valueTypeId:int,
-                         creditCardId:int) -> None:
+                         creditCardId:int) -> int:
     
+    createdId:int = getNextTableId()
+
     newFinancialEntry : FinancialEntry = FinancialEntry()
+    newFinancialEntry.id = createdId
     newFinancialEntry.name = name
     newFinancialEntry.entry_type_id = entryTypeId
     newFinancialEntry.recurrent = recurrent
@@ -27,11 +41,7 @@ def insertFinancialEntry(name:str,
     create_session().add(newFinancialEntry)
     create_session().commit
 
-
-def insertFinancialEntry(financialEntry: FinancialEntry) -> None:
-
-    create_session().add(financialEntry)
-    create_session().commit
+    return createdId
 
 
 def searchAllFinancialEntry() -> List[FinancialEntry]:
@@ -74,12 +84,12 @@ def updateFinancialEntry(id:int,
                          creditCardId:int) -> None:
     
     if (not id):
-        raise RuntimeError('id must be given to update Financial Entry record.')
+        raise BusinessRulesException('ID da Movimentação Financeira deve ser informado.')
     
     existingFinancialEntry : FinancialEntry = searchFinancialEntryById(id)
 
     if (not existingFinancialEntry):
-        raise RuntimeError(f'Financial Entry not found with ID:{id}')
+        raise BusinessRulesException(f'Movimentação Financeira não encontrada com esse identificador:{id}')
 
     if (name):
         existingFinancialEntry.name = name

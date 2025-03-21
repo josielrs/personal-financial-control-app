@@ -6,5 +6,5 @@ class EntryType(Enum):
     RESERVA = 3
 
     @classmethod
-    def hasValue(cls, value):
+    def hasValue(cls, value) -> bool:
         return value in cls._value2member_map_
