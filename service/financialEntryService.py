@@ -149,7 +149,7 @@ def updateFinancialEntry(id:int,
 
     updateFinancialEntryRep(id,name,entryTypeId,recurrent,startDate,finishDate,value,financialEntryCategoryId,valueTypeId,creditCardId)
     
-    isFixValueChanged: bool = ((ValueType.FIXO.value == existingFinancialEntry.value_type_id) and (value != existingFinancialEntry.value))
+    isFixValueChanged: bool = (value and (ValueType.FIXO.value == existingFinancialEntry.value_type_id) and (value != existingFinancialEntry.value))
 
     # Se o tipo de movimentacao tiver valor fixo ou teve alteração de dia nas datas de inicio e fim, procura os controles mensais e atualiza os dados
     if ( isFixValueChanged or (startDate != existingFinancialEntry.start_date)):
@@ -271,6 +271,9 @@ def validateFinancialEntryData(name:str,
     
     if (valueTypeId and isUpdate and valueTypeId != financialEntry.value_type_id):
         raise BusinessRulesException('Não é permitido mudar o tipo de valor da movimentação financeira !')
+    
+    if (valueTypeId and ValueType.FIXO.value == valueTypeId and not value and not isUpdate):
+        raise BusinessRulesException('A movimentação financeira com valor fixo deve ter um valor informado já no cadastro !')
     
     if (creditCardId):
 
