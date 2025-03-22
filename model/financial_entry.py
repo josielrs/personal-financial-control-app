@@ -38,3 +38,8 @@ class FinancialEntry(Base):
     credit_card: CreditCard = orm.relationship('CreditCard',lazy='joined')
 
     month_number: int = calculateMonthNumber(start_date,finish_date)
+
+    description: str = f'[{'-' if not financial_entry_category else financial_entry_category.name}] - {name} - {id}'
+
+    def __str__(self):
+        return self.description

@@ -113,7 +113,7 @@ def updateFinancialEntry(id:int,
     create_session().commit
 
 
-def deleteFinancialControlEntryById(id:int) -> None:
+def deleteFinancialEntryById(id:int) -> None:
 
     create_session().query(FinancialEntry).filter(FinancialEntry.id == id).delete()
     create_session().commit     
