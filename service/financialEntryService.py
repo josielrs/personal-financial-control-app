@@ -6,15 +6,25 @@ from repository.financialEntryRepository import searchAllFinancialEntryByType as
 from repository.financialEntryRepository import updateFinancialEntry as updateFinancialEntryRep
 from repository.financialEntryRepository import deleteFinancialEntryById as deleteFinancialEntryByIdRep
 from model.financial_entry import FinancialEntry
+from model.financial_control import FinancialControl
+from model.financial_control_entry import FinancialControlEntry
 from model.financial_entry_category import FinancialEntryCategory
 from datetime import date
 from service.domain.entryTypeEnum import EntryType
 from service.domain.valueTypeEnum import ValueType
 from service.financialEntryCategoryService import searchFinancialEntryCategoryById
+from service.financialControlService import searchFinancialControlByInitialMonthAndYear
+from service.financialControlService import searchAllFinancialControlWithNoEntries
+from service.financialControlService import deleteFinancialControl
 from service.creditCardService import searchCreditCardById
+from service.financialControlEntryService import insertFinancialControlEntry
+from service.financialControlEntryService import searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId
+from service.financialControlEntryService import updateFinancialControlEntry
+from service.financialControlEntryService import deleteFinancialControlEntry
 from typing import List
 from model.credit_card import CreditCard
 from service.exception.businessRulesException import BusinessRulesException
+import pandas as pd
 
 
 def diff_month(d1:date, d2:date):
@@ -35,9 +45,11 @@ def __insertFinancialEntryData__(name:str,
         
     id: int = insertFinancialEntryRep(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardId)
 
-    """
-        TODO: Incluir processo que insere essa entrada nos meses competentes, e abre os meses que n tiverem abertos
-    """
+    # inserindo a movimentação dos controles mensais já criados
+    financialControls: List[FinancialControl] = searchFinancialControlByInitialMonthAndYear(startDate.month,startDate.year)
+    if (financialControls and len(financialControls)>0):
+        for financialControl in financialControls:
+            insertFinancialControlEntry(financialControl.month,financialControl.year,id,value,date(financialControl.year,financialControl.month,startDate.day))
 
     return id    
     
@@ -92,7 +104,7 @@ def searchFinancialEntryById(id:int) -> FinancialEntry:
     return searchFinancialEntryByIdRep(id)
 
 
-def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> FinancialEntry:
+def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> List[FinancialEntry]:
 
     if (not startDate and not finishDate):
         raise BusinessRulesException('Favor informar um dos parametros de data !!')
@@ -101,6 +113,20 @@ def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> Financial
         raise BusinessRulesException('Data de inicio da movimentação financeira deve ser menor que a data fim !')    
 
     return searchAllFinancialEntryByDatesRep(startDate,finishDate)
+
+
+def searchAllFinancialEntryByGivenMonthAndYear(month:int, year:int) -> List[FinancialEntry]:
+
+    if (not month):
+        raise BusinessRulesException('Mês de consulta deve ser informado !')    
+    if (month < 1 or month > 12):
+        raise BusinessRulesException('O mês informado para consulta, está inválido !!')
+    if (not year):
+        raise BusinessRulesException('Ano de consulta deve ser informado !')    
+    if (year < 1900 or year > 2999):
+        raise BusinessRulesException('O ano informado para consulta, está inválido !!')    
+
+    return searchAllFinancialEntryByDates(date(year,month,1),pd.Period('01-'+month+'-'+year,freq='M').end_time.date())
 
 
 def updateFinancialEntry(id:int,
@@ -122,12 +148,18 @@ def updateFinancialEntry(id:int,
     validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardId, True, existingFinancialEntry, id)
 
     updateFinancialEntryRep(id,name,entryTypeId,recurrent,startDate,finishDate,value,financialEntryCategoryId,valueTypeId,creditCardId)
+    
+    isFixValueChanged: bool = ((ValueType.FIXO.value == existingFinancialEntry.value_type_id) and (value != existingFinancialEntry.value))
 
-    """
-        TODO: Reorgaizar entrada nos controles mensais
-    """
+    # Se o tipo de movimentacao tiver valor fixo ou teve alteração de dia nas datas de inicio e fim, procura os controles mensais e atualiza os dados
+    if ( isFixValueChanged or (startDate != existingFinancialEntry.start_date)):
+        financialEntries: List[FinancialControlEntry] = searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId(startDate.month,startDate.year,id)
+        if (financialEntries and len(financialEntries)>0):
+            for financialEntry in financialEntries:
+                newValue: float = value if isFixValueChanged else financialEntry.value
+                updateFinancialControlEntry(financialEntry.financial_control_month,financialEntry.financial_control_year,id,newValue,date(financialEntry.financial_control_year,financialEntry.financial_control_month,startDate.day))       
 
-    return searchFinancialEntryByIdRep(id)
+    return searchFinancialEntryById(id)
 
 
 def deleteFinancialEntryById(id:int) -> None:
@@ -135,11 +167,22 @@ def deleteFinancialEntryById(id:int) -> None:
     if (not id):
         raise BusinessRulesException('Identificador da movimentação finaceira deve ser informado !')
     
-    """
-        TODO: Tratar os controles mensais abertos com essa movimentacao
-    """    
+    financialEntry:FinancialEntry = searchFinancialEntryById(id)
+    if (financialEntry):
 
-    return deleteFinancialEntryByIdRep(id)
+        #excluindo a movimentação dos controles existentes
+        financialEntries: List[FinancialControlEntry] = searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId(financialEntry.start_date.month,financialEntry.start_date.year,id)          
+        if (financialEntries and len(financialEntries)>0):
+            for financialEntry in financialEntries:
+                deleteFinancialControlEntry(financialEntry.financial_control_month,financialEntry.financial_control_year,id) 
+
+        #excluindo controles de meses sem nenhuma movimentacao associada            
+        financialControls: List[FinancialControl] = searchAllFinancialControlWithNoEntries()
+        if (financialControls and len(financialControls)>0):
+            for financialControl in financialControls:
+                deleteFinancialControl(financialControl.month,financialControl.year)
+
+    deleteFinancialEntryByIdRep(id)
 
 
 def validateFinancialEntryData(name:str,
@@ -190,7 +233,25 @@ def validateFinancialEntryData(name:str,
     
     if (finishDate and diff_month(startDate,finishDate) <= 0):
         raise BusinessRulesException('Data de inicio e fim da movimentação financeira deve ser ter no minimo 1 mês de diferença !')  
-           
+    
+    if (startDate and finishDate and startDate.day != finishDate.day):
+        raise BusinessRulesException('O dia da Data de inicio e fim da movimentação financeira deve ser o mesmo !') 
+
+    if (startDate and isUpdate and startDate.month != financialEntry.start_date.month):
+        raise BusinessRulesException('Na data de inicio da movimentação financeira, não se pode alterar o mês !') 
+    
+    if (startDate and isUpdate and startDate.year != financialEntry.start_date.year):
+        raise BusinessRulesException('Na data de inicio da movimentação financeira, não se pode alterar o ano !')     
+
+    if (finishDate and isUpdate and not financialEntry.finish_date):   
+        raise BusinessRulesException('A data fim da movimentação financeira não pode ser incluida !')     
+
+    if (finishDate and isUpdate and finishDate.month != financialEntry.finish_date.month):
+        raise BusinessRulesException('Na data fim da movimentação financeira, não se pode alterar o mês !')        
+    
+    if (finishDate and isUpdate and finishDate.year != financialEntry.finish_date.year):
+        raise BusinessRulesException('Na data fim da movimentação financeira, não se pode alterar o ano !')      
+
     if (value and value < 0):
         raise BusinessRulesException('Valor da movimentação financeira não pode ser negativo !') 
     

@@ -59,7 +59,7 @@ def searchFinancialEntryById(id:int) -> FinancialEntry:
     return create_session().query(FinancialEntry).filter(FinancialEntry.id == id).first()
 
 
-def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> FinancialEntry:
+def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> List[FinancialEntry]:
 
     query = create_session().query(FinancialEntry)
 

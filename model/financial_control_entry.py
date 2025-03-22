@@ -4,6 +4,8 @@ from model.base import Base
 from model.financial_control import FinancialControl
 from model.financial_entry import FinancialEntry
 
+from datetime import date
+
 class FinancialControlEntry(Base):
     __tablename__: str = 'FINANCIAL_CONTROL_ENTRY'
 
@@ -15,3 +17,4 @@ class FinancialControlEntry(Base):
     financial_entry: FinancialEntry = orm.relationship('FinancialEntry',lazy='joined')
 
     value: float = sa.Column(sa.DECIMAL(16,4),nullable=True)
+    entry_date: date = sa.Column(sa.Date,nullable=False)
