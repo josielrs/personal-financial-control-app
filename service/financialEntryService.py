@@ -69,7 +69,7 @@ def insertFinancialEntry(name:str,
     return searchFinancialEntryById(id)
 
 
-def insertFinancialEntry(financialEntry: FinancialEntry) -> FinancialEntry:
+def insertFinancialEntryByObject(financialEntry: FinancialEntry) -> FinancialEntry:
 
     if (not financialEntry):
         raise BusinessRulesException('Nenhuma movimentação finaceira foi informada para inserção !')
