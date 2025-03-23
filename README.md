@@ -73,10 +73,4 @@ Segue abaixo o diagrama entidade e relacionamento do projeto
 
 ## API Documentation - SWAGGER
 
-Since one file can be published to multiple locations, you can list and manage publish locations by clicking **File publication** in the **Publish** sub-menu. This allows you to list and remove publication locations that are linked to your file.
-
-
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEzNjg4NTYwNDFdfQ==
--->
+Abra o [http://localhost:5000/docs](http://localhost:5000/docs) no navegador para verificar a documentação das APIs.

@@ -336,7 +336,7 @@ def insertNewFinancialControlMonth(form:FinancialControlSchemaToInsert):
         logger.error(f'[insertNewFinancialControlMonth] - failed to insert financial control : {str(e)}','General Error',exc_info=True)
         return {"message",str(e)}, 500
         
-
+       
 @app.get('/financialControl', tags=[financial_control_tag],
           responses={"200": FinancialControlCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204": None})
 def searchFinancialControls():
@@ -513,6 +513,7 @@ def searchAllFinancialControlCategoriesData():
         logger.error(f'[searchAllFinancialControlCategoriesData] - failed to search financial entries : {str(e)}','General Error',exc_info=True)
         return {"message",str(e)}, 500    
     
+# CREDIT CARD FLAG QUERIES    
 
 @app.get('/creditCardFlag', tags=[auxiliar_operation_tag],
           responses={"200": CreditCardFlagCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
