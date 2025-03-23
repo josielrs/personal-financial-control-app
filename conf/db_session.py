@@ -20,7 +20,7 @@ def create_engine() -> Engine:
     if __engine:
         return __engine
     
-    arquivo_db = 'database/personalfinancialcontroldb.db'
+    arquivo_db = 'database/pfcdb.db'
     folder = Path(arquivo_db).parent
     folder.mkdir(parents=True,exist_ok=True)
 

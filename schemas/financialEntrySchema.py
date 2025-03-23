@@ -19,6 +19,10 @@ class FinancialEntrySchemaToInsert():
     value_type_id: int
     credit_card_id: int
 
+    def __str__(self):
+        return str(self.__dict__)    
+
+
 class FinancialEntrySchemaToUpdate():
     id: int
     start_date: date
@@ -27,11 +31,23 @@ class FinancialEntrySchemaToUpdate():
     financial_entry_category_id: int
     credit_card_id: int
 
+    def __str__(self):
+        return str(self.__dict__)
+
+
 class FinancialEntrySchemaToSearch():
     entry_type_id: int
 
+    def __str__(self):
+        return str(self.__dict__)    
+
+
 class FinancialEntrySchemaToDelete():
     id: int
+
+    def __str__(self):
+        return str(self.__dict__)    
+
 
 class FinancialEntrySchema():
     id: int
@@ -49,11 +65,17 @@ class FinancialEntrySchema():
     value_type_name: str
     credit_card_id: int
     credit_card_desc: str
-    description: str   
+    description: str  
+
+    def __str__(self):
+        return str(self.__dict__)     
 
 
 class FinancialEntryCollectionSchema():
     financialEntries: List[FinancialEntrySchema]
+
+    def __str__(self):
+        return str(self.__dict__)    
 
 
 def showFinancialEntry(financialEntry: FinancialEntry) -> FinancialEntrySchema:
@@ -75,7 +97,7 @@ def showFinancialEntry(financialEntry: FinancialEntry) -> FinancialEntrySchema:
     financialEntrySchema.value_type_name = financialEntry.value_type.name if financialEntry.value_type else ''
     financialEntrySchema.credit_card_id = financialEntry.credit_card_id
     financialEntrySchema.credit_card_desc = financialEntry.credit_card.description if financialEntry.credit_card else ''
-    financialEntrySchema.description = financialEntry.description
+    financialEntrySchema.description = financialEntry.description   
 
     return financialEntrySchema
 

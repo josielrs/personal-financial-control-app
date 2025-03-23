@@ -59,8 +59,6 @@ def searchFinancialControlSummary(month: int, year: int) -> FinancialControlSumm
         raise BusinessRulesException('Ano do controle mensal deve ser informado !')  
 
     financialControlSummary: FinancialControlSummary = FinancialControlSummary()
-    financialControlSummary.month = month
-    financialControlSummary.year = year
     financialControlSummary.revenueAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RECEITA.value)
     financialControlSummary.expensesAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.DESPESA.value)
     financialControlSummary.reservesAmount = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RESERVA.value)

@@ -3,7 +3,8 @@
 Este projeto é um backend de uma aplicação cujo propósito é auxiliar o usuário no controle de seus gastos mensais, registrando receitas, despesas e reservas num só lugar possibilitando ao usuário uma visão mais ampla de como sua vida financeira acontece, de onde vem as receitas, quanto elas são, e pra onde elas estão indo. Desta forma o usuário poderá tomar decisões mais estratégicas alinhadas com seus objetivos pessoais.
 
 
-# Arquivos
+
+# ARQUIVOS
 
 Segue abaixo uma descrição resumida da estrutura do projeto
 
@@ -17,10 +18,19 @@ Classes que representam os modelos de dados manipulados pela aplicação.
 
 ## schemas
 
-XXXXXXX
+Classes que representam os dados de entrada e saida da aplicação
+
+## services
+
+Classes que representam as operações e a implementação das regras de negócio
+
+## repository
+
+Classes que representam as operações de manipulação de dados no banco de dados
 
 
-# Como Executar
+
+# COMO EXECUTAR
 
 
 Será necessário ter todas as libs python listadas no `requirements.txt` instaladas.
@@ -50,7 +60,8 @@ automaticamente após uma mudança no código fonte.
 Abra o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador para verificar o status da API em execução.
 
 
-# Documentação
+
+# DOCUMENTAÇÕES
 
 Segue abaixo a documentação deste projeto
 
