@@ -1,9 +1,9 @@
 from model.credit_card_flag import CreditCardFlag
-
+from pydantic import BaseModel
 from typing import List
 
 
-class CreditCardFlagSchema():
+class CreditCardFlagSchema(BaseModel):
     id: int
     name: str
 
@@ -11,7 +11,7 @@ class CreditCardFlagSchema():
         return str(self.__dict__)     
 
 
-class CreditCardFlagCollectionSchema():
+class CreditCardFlagCollectionSchema(BaseModel):
     creditCardFlags: List[CreditCardFlagSchema]
 
     def __str__(self):

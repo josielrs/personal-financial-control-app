@@ -1,9 +1,9 @@
 from model.financial_entry_category import FinancialEntryCategory
-
+from pydantic import BaseModel
 from typing import List
 
 
-class FinancialEntryCategorySchema():
+class FinancialEntryCategorySchema(BaseModel):
     id: int
     name: str
 
@@ -11,14 +11,14 @@ class FinancialEntryCategorySchema():
         return str(self.__dict__)     
 
 
-class FinancialEntryCategorySchemaToSearch():
+class FinancialEntryCategorySchemaToSearch(BaseModel):
     entry_type_id: int
 
     def __str__(self):
         return str(self.__dict__)    
     
 
-class FinancialEntryCategoryCollectionSchema():
+class FinancialEntryCategoryCollectionSchema(BaseModel):
     financialEntryCategories: List[FinancialEntryCategorySchema]
 
     def __str__(self):

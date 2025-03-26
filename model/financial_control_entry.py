@@ -11,10 +11,14 @@ class FinancialControlEntry(Base):
 
     financial_control_month: int = sa.Column(sa.Numeric(2), sa.ForeignKey('FINANCIAL_CONTROL.month'), nullable=False)
     financial_control_year: int = sa.Column(sa.Numeric(4), sa.ForeignKey('FINANCIAL_CONTROL.year'), nullable=False)
-    financial_control: FinancialControl = orm.relationship('FinancialControl',lazy='joined')
+    financial_control: orm.Mapped[FinancialControl] = orm.relationship('FinancialControl',lazy='joined')
 
     financial_entry_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('FINANCIAL_ENTRY.ID'), nullable=False)
-    financial_entry: FinancialEntry = orm.relationship('FinancialEntry',lazy='joined')
+    financial_entry: orm.Mapped[FinancialEntry] = orm.relationship('FinancialEntry',lazy='joined')
 
     value: float = sa.Column(sa.DECIMAL(16,4),nullable=True)
     entry_date: date = sa.Column(sa.Date,nullable=False)
+
+    __mapper_args__ = {
+        "primary_key":[financial_control_month, financial_control_year]
+    }    

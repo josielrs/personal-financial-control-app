@@ -1,5 +1,4 @@
 from model.financial_control import FinancialControl
-from model.financial_entry import FinancialEntry
 
 from repository.financialControlRepository import insertFinancialControl as insertFinancialControlRep
 from repository.financialControlRepository import searchFinancialControlByMonthAndYear as searchFinancialControlByMonthAndYearRep
@@ -11,8 +10,6 @@ from repository.financialControlRepository import searchFinancialControlByInitia
 from repository.financialControlRepository import searchAllFinancialControlWithNoEntries as searchAllFinancialControlWithNoEntriesRep
 
 from service.financialControlEntryService import deleteAllFinancialControlEntriesByMonthAndYear
-from service.financialControlEntryService import insertFinancialControlEntry
-from service.financialEntryService import searchAllFinancialEntryByGivenMonthAndYear
 from service.exception.businessRulesException import BusinessRulesException
 from service.domain.controlStatusEnum import ControlStatus
 from service.domain.financialControlSummary import FinancialControlSummary
@@ -38,18 +35,6 @@ def insertFinancialControl(month: int,
 
     return searchFinancialControlByMonthAndYear(month,year)
 
-def buildFinancialControl(month: int, 
-                           year: int) -> None:
-    
-    insertFinancialControl(month,year,ControlStatus.ABERTO)
-
-    financialEntries:List[FinancialEntry] = searchAllFinancialEntryByGivenMonthAndYear(month,year)
-
-    if (financialEntries and len(financialEntries)>0):
-
-        for financialEntry in financialEntries:
-            financialEntryDay:int = financialEntry.start_date.day()
-            insertFinancialControlEntry(month,year,financialEntry.id,financialEntry.value,date(year,month,financialEntryDay))
 
 def searchFinancialControlSummary(month: int, year: int) -> FinancialControlSummary:
 

@@ -1,10 +1,11 @@
-from conf.db_session import create_session
+from sqlalchemy.orm import Session
+from model import Session
 from model.financial_entry_category import FinancialEntryCategory
 from typing import List
 
 def searchAllFinancialEntryCategory() -> List[FinancialEntryCategory]:
 
-    return create_session().query(FinancialEntryCategory).all()
+    return Session.query(FinancialEntryCategory).all()
 
 
 def searchFinancialEntryCategoryById(id: int) -> FinancialEntryCategory:

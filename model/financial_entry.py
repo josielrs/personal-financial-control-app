@@ -21,25 +21,26 @@ class FinancialEntry(Base):
     name: str = sa.Column(sa.String(256), nullable=False)
 
     entry_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('ENTRY_TYPE.ID'), nullable=False)
-    entry_type: EntryType = orm.relationship('EntryType',lazy='joined')
+    entry_type: orm.Mapped[EntryType] = orm.relationship('EntryType',lazy='joined')
 
     recurrent: int = sa.Column(sa.Numeric(1),nullable=False)
-    start_date: date = sa.Column(sa.Date,default=date.now,nullable=False)
+    start_date: date = sa.Column(sa.Date,default=date.today,nullable=False)
     finish_date: date = sa.Column(sa.Date,nullable=True)
     value: float = sa.Column(sa.DECIMAL(16,4),nullable=True)
 
     financial_entry_category_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('FINANCIAL_ENTRY_CATEGORY.ID'), nullable=False)
-    financial_entry_category: FinancialEntryCategory = orm.relationship('FinancialEntryCategory',lazy='joined')
+    financial_entry_category: orm.Mapped[FinancialEntryCategory] = orm.relationship('FinancialEntryCategory',lazy='joined')
 
     value_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('VALUE_TYPE.ID'), nullable=False)
-    value_type: ValueType = orm.relationship('ValueType',lazy='joined')
+    value_type: orm.Mapped[ValueType] = orm.relationship('ValueType',lazy='joined')
 
     credit_card_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD.ID'), nullable=True)
-    credit_card: CreditCard = orm.relationship('CreditCard',lazy='joined')
+    credit_card: orm.Mapped[CreditCard] = orm.relationship('CreditCard',lazy='joined')
 
-    month_number: int = calculateMonthNumber(start_date,finish_date)
-
-    description: str = f'[{'-' if not financial_entry_category else financial_entry_category.name}] - {name} - {id}'
 
     def __str__(self):
-        return self.description
+        return f'[{'-' if not self.financial_entry_category else self.financial_entry_category.name}] - {self.name} - {self.id}'
+    
+    
+    def returnMonthNumber(self):
+        return calculateMonthNumber(self.start_date,self.finish_date)

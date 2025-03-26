@@ -1,4 +1,5 @@
 from datetime import date
+from pydantic import BaseModel
 from model.financial_entry import FinancialEntry
 from model.entry_type import EntryType
 from model.financial_entry_category import FinancialEntryCategory
@@ -8,7 +9,7 @@ from model.credit_card import CreditCard
 from typing import List
 
 
-class FinancialEntrySchemaToInsert():
+class FinancialEntrySchemaToInsert(BaseModel):
     name: str
     entry_type_id: int
     recurrent: int
@@ -23,7 +24,7 @@ class FinancialEntrySchemaToInsert():
         return str(self.__dict__)    
 
 
-class FinancialEntrySchemaToUpdate():
+class FinancialEntrySchemaToUpdate(BaseModel):
     id: int
     start_date: date
     finish_date: date
@@ -35,21 +36,21 @@ class FinancialEntrySchemaToUpdate():
         return str(self.__dict__)
 
 
-class FinancialEntrySchemaToSearch():
+class FinancialEntrySchemaToSearch(BaseModel):
     entry_type_id: int
 
     def __str__(self):
         return str(self.__dict__)    
 
 
-class FinancialEntrySchemaToDelete():
+class FinancialEntrySchemaToDelete(BaseModel):
     id: int
 
     def __str__(self):
         return str(self.__dict__)    
 
 
-class FinancialEntrySchema():
+class FinancialEntrySchema(BaseModel):
     id: int
     name: str
     entry_type_id: int
@@ -71,7 +72,7 @@ class FinancialEntrySchema():
         return str(self.__dict__)     
 
 
-class FinancialEntryCollectionSchema():
+class FinancialEntryCollectionSchema(BaseModel):
     financialEntries: List[FinancialEntrySchema]
 
     def __str__(self):

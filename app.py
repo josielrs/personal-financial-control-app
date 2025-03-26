@@ -12,6 +12,7 @@ from schemas.creditCardFlagSchema import *
 from schemas.error import *
 
 from service.exception.businessRulesException import BusinessRulesException
+from service.financialEntryService import buildFinancialControl
 from service.financialEntryService import insertFinancialEntry
 from service.financialEntryService import updateFinancialEntry
 from service.financialEntryService import deleteFinancialEntryById
@@ -21,7 +22,6 @@ from service.creditCardService import updateCreditCard
 from service.creditCardService import deleteCreditCard
 from service.creditCardService import searchAllCreditCard
 from service.creditCardService import searchCreditCardByNumber
-from service.financialControlService import buildFinancialControl
 from service.financialControlEntryService import updateFinancialControlEntry
 from service.financialControlService import searchAllFinancialControl
 from service.financialControlService import searchFinancialControlSummary
@@ -79,11 +79,11 @@ def insertNewFinancialEntry(form:FinancialEntrySchemaToInsert):
         return showFinancialEntry(financialEntry), 200
 
     except BusinessRulesException as e:
-        logger.error(f'[insertNewFinancialEntry] - failed to insert financial entry : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[insertNewFinancialEntry] - failed to insert financial entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[insertNewFinancialEntry] - failed to insert financial entry : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[insertNewFinancialEntry] - failed to insert financial entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
         
 
 @app.get('/financialEntry', tags=[entry_tag],
@@ -105,18 +105,18 @@ def searchFinancialEntries(form:FinancialEntrySchemaToSearch):
         finantialEntries: List[FinancialEntry] = searchAllFinancialEntryByType(form.entry_type_id)
         if (finantialEntries and len(finantialEntries)>0):
             for financialEntry in finantialEntries:
-                financialEntryCollectionSchema.financialEntries.append(financialEntry)
+                financialEntryCollectionSchema.financialEntries.append(showFinancialEntry(financialEntry))
 
         logger.info(f'[searchFinancialEntries] - {0 if not finantialEntries else len(finantialEntries)} records founded !!')                
 
         return financialEntryCollectionSchema, 200
 
     except BusinessRulesException as e:
-        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
     
 
 @app.patch('/financialEntry', tags=[entry_tag],
@@ -139,11 +139,11 @@ def updateFinancialEntryData(form:FinancialEntrySchemaToUpdate):
         return showFinancialEntry(financialEntry), 200
 
     except BusinessRulesException as e:
-        logger.error(f'[updateFinancialEntryData] - failed to update financial entry : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[updateFinancialEntryData] - failed to update financial entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[updateFinancialEntryData] - failed to update financial entry : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500  
+        logger.error(f'[updateFinancialEntryData] - failed to update financial entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500  
 
 
 @app.delete('/financialEntry', tags=[entry_tag],
@@ -166,11 +166,11 @@ def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
         return deleteData, 200
 
     except BusinessRulesException as e:
-        logger.error(f'[deleteFinancialEntryData] - failed to delete financial entry : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[deleteFinancialEntryData] - failed to delete financial entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[deleteFinancialEntryData] - failed to delete financial entry : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500 
+        logger.error(f'[deleteFinancialEntryData] - failed to delete financial entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500 
     
 # CREDIT CARD OPERATIONS    
 
@@ -193,11 +193,11 @@ def insertNewCreditCard(form:CreditCardSchemaToInsert):
         return showCreditCard(creditCard), 200
 
     except BusinessRulesException as e:
-        logger.error(f'[insertNewCreditCard] - failed to insert credit card : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[insertNewCreditCard] - failed to insert credit card : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[insertNewCreditCard] - failed to insert credit card : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[insertNewCreditCard] - failed to insert credit card : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
         
 
 @app.get('/creditCard', tags=[credit_card_tag],
@@ -212,18 +212,18 @@ def searchCreditCards():
         creditCards: List[CreditCard] = searchAllCreditCard()
         if (creditCards and len(creditCards)>0):
             for creditCard in creditCards:
-                creditCardCollectionSchema.creditCards.append(creditCard)
+                creditCardCollectionSchema.creditCards.append(showCreditCard(creditCard))
 
         logger.info(f'[searchCreditCards] - {0 if not creditCards else len(creditCards)} records founded !!')                
 
         return creditCardCollectionSchema, 200
 
     except BusinessRulesException as e:
-        logger.error(f'[searchCreditCards] - failed to search credit cards : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchCreditCards] - failed to search credit cards : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchCreditCards] - failed to search credit cards : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[searchCreditCards] - failed to search credit cards : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
     
 
 @app.get('/creditCard/number', tags=[credit_card_tag],
@@ -248,11 +248,11 @@ def searchCreditCardByGivenNumber(form:CreditCardSchemaToSearch):
             return None, 204
 
     except BusinessRulesException as e:
-        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
 
 
 
@@ -276,11 +276,11 @@ def updateCreditCardData(form:CreditCardSchemaToUpdate):
         return showCreditCard(creditCard), 200
 
     except BusinessRulesException as e:
-        logger.error(f'[updateCreditCardData] - failed to update credit card : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[updateCreditCardData] - failed to update credit card : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[updateCreditCardData] - failed to update credit card : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500  
+        logger.error(f'[updateCreditCardData] - failed to update credit card : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500  
 
 
 @app.delete('/creditCard', tags=[credit_card_tag],
@@ -303,11 +303,11 @@ def deleteCreditCardData(form:CreditCardSchemaToDelete):
         return deleteData, 200
 
     except BusinessRulesException as e:
-        logger.error(f'[deleteCreditCardData] - failed to delete credit card : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[deleteCreditCardData] - failed to delete credit card : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[deleteCreditCardData] - failed to delete credit card : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500     
+        logger.error(f'[deleteCreditCardData] - failed to delete credit card : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500     
 
 
 # FINANCIAL CONTROL OPERATIONS      
@@ -330,11 +330,11 @@ def insertNewFinancialControlMonth(form:FinancialControlSchemaToInsert):
         return None, 200
 
     except BusinessRulesException as e:
-        logger.error(f'[insertNewFinancialControlMonth] - failed to insert financial control : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[insertNewFinancialControlMonth] - failed to insert financial control : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[insertNewFinancialControlMonth] - failed to insert financial control : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[insertNewFinancialControlMonth] - failed to insert financial control : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
         
        
 @app.get('/financialControl', tags=[financial_control_tag],
@@ -349,7 +349,7 @@ def searchFinancialControls():
         financialControls: List[FinancialControl] = searchAllFinancialControl()
         if (financialControls and len(financialControls)>0):
             for financialControl in financialControls:
-                financialControlCollectionSchema.financialControls.append(financialControl)
+                financialControlCollectionSchema.financialControls.append(showFinancialControl(financialControl))
             
             logger.info(f'[searchFinancialControls] - {len(financialControls)} records founded !!') 
             
@@ -358,11 +358,11 @@ def searchFinancialControls():
             return None, 204
 
     except BusinessRulesException as e:
-        logger.error(f'[searchFinancialControls] - failed to search financial controls : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchFinancialControls] - failed to search financial controls : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchFinancialControls] - failed to search financial controls : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[searchFinancialControls] - failed to search financial controls : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
     
 
 @app.get('/financialControl/details', tags=[financial_control_tag],
@@ -382,7 +382,7 @@ def searchAllFinancialControlEntries(form:FinancialControlEntrySchemaToSearch):
 
         if (financialControlEntries and len(financialControlEntries)>0):
             for financialControlEntry in financialControlEntries:
-                financialControlEntryCollectionSchema.financialControlEntries.append(financialControlEntry)
+                financialControlEntryCollectionSchema.financialControlEntries.append(showFinancialControlEntries(financialControlEntry))
 
             logger.info(f'[searchAllFinancialControlEntries] - {len(financialControlEntries)} records founded !!')                
 
@@ -392,11 +392,11 @@ def searchAllFinancialControlEntries(form:FinancialControlEntrySchemaToSearch):
 
 
     except BusinessRulesException as e:
-        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
 
 
 @app.get('/financialControl/summary', tags=[financial_control_tag],
@@ -418,11 +418,11 @@ def searchFinancialControlSummaryData(form:FinancialControlSchemaToSearch):
             return None, 204
 
     except BusinessRulesException as e:
-        logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
 
 
 
@@ -443,11 +443,11 @@ def updateFinancialControlEntryData(form:FinancialControlEntrySchemaToUpdate):
         return None, 200
 
     except BusinessRulesException as e:
-        logger.error(f'[updateFinancialControlEntryData] - failed to update financial control entry : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[updateFinancialControlEntryData] - failed to update financial control entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[updateFinancialControlEntryData] - failed to update financial control entry : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500  
+        logger.error(f'[updateFinancialControlEntryData] - failed to update financial control entry : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500  
     
 # FINANCIAL CATEGORY QUERIES
 
@@ -468,7 +468,7 @@ def searchAllFinancialControlCategoriesByEntryTypeId(form:FinancialEntryCategory
 
         if (financialEntryCategories and len(financialEntryCategories)>0):
             for financialEntryCategory in financialEntryCategories:
-                financialEntryCategoryCollectionSchema.financialEntryCategories.append(financialEntryCategory)
+                financialEntryCategoryCollectionSchema.financialEntryCategories.append(showFinancialEntryCategorySchema(financialEntryCategory))
 
             logger.info(f'[searchAllFinancialControlCategoriesByEntryTypeId] - {len(financialEntryCategories)} records founded !!')                
 
@@ -478,11 +478,11 @@ def searchAllFinancialControlCategoriesByEntryTypeId(form:FinancialEntryCategory
 
 
     except BusinessRulesException as e:
-        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500
+        logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
     
 
 @app.get('/financialControlCategory', tags=[auxiliar_operation_tag],
@@ -497,7 +497,7 @@ def searchAllFinancialControlCategoriesData():
 
         if (financialEntryCategories and len(financialEntryCategories)>0):
             for financialEntryCategory in financialEntryCategories:
-                financialEntryCategoryCollectionSchema.financialEntryCategories.append(financialEntryCategory)
+                financialEntryCategoryCollectionSchema.financialEntryCategories.append(showFinancialEntryCategorySchema(financialEntryCategory))
 
             logger.info(f'[searchAllFinancialControlCategoriesData] - {len(financialEntryCategories)} records founded !!')                
 
@@ -507,11 +507,11 @@ def searchAllFinancialControlCategoriesData():
 
 
     except BusinessRulesException as e:
-        logger.error(f'[searchAllFinancialControlCategoriesData] - failed to search financial entries : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchAllFinancialControlCategoriesData] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchAllFinancialControlCategoriesData] - failed to search financial entries : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500    
+        logger.error(f'[searchAllFinancialControlCategoriesData] - failed to search financial entries : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500    
     
 # CREDIT CARD FLAG QUERIES    
 
@@ -537,8 +537,8 @@ def searchAllCreditCardFlagsData():
 
 
     except BusinessRulesException as e:
-        logger.error(f'[searchAllCreditCardFlagsData] - failed to search credit card flags : {str(e)}','Business Rule Error',exc_info=True)
-        return {"message",str(e)}, 400
+        logger.error(f'[searchAllCreditCardFlagsData] - failed to search credit card flags : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
     except Exception as e:
-        logger.error(f'[searchAllCreditCardFlagsData] - failed to search credit card flags : {str(e)}','General Error',exc_info=True)
-        return {"message",str(e)}, 500        
+        logger.error(f'[searchAllCreditCardFlagsData] - failed to search credit card flags : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500        

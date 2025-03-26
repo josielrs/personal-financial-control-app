@@ -9,4 +9,3 @@ class FinancialEntryCategory(Base):
     id: int = sa.Column(sa.Numeric(16), primary_key=True, autoincrement=True, nullable=False)
     name: str = sa.Column(sa.String(256), nullable=False)
     entry_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('ENTRY_TYPE.ID'), nullable=False)
-    entry_type: EntryType = orm.relationship('EntryType',lazy='joined')

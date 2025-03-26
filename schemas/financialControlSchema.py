@@ -2,7 +2,7 @@ from datetime import date
 from model.financial_control import FinancialControl
 from model.financial_control_entry import FinancialControlEntry
 from model.financial_entry import FinancialEntry
-
+from pydantic import BaseModel
 from schemas.financialEntrySchema import FinancialEntrySchema
 from schemas.financialEntrySchema import showFinancialEntry
 
@@ -11,7 +11,7 @@ from service.domain.financialControlSummary import FinancialControlSummary
 from typing import List
 
 
-class FinancialControlSchemaToInsert():
+class FinancialControlSchemaToInsert(BaseModel):
     month: int
     year: int
 
@@ -19,7 +19,7 @@ class FinancialControlSchemaToInsert():
         return str(self.__dict__)    
 
 
-class FinancialControlEntrySchemaToUpdate():
+class FinancialControlEntrySchemaToUpdate(BaseModel):
     month: int
     year: int
     financialEntryId: int
@@ -29,7 +29,7 @@ class FinancialControlEntrySchemaToUpdate():
         return str(self.__dict__)
 
 
-class FinancialControlEntrySchemaToSearch():
+class FinancialControlEntrySchemaToSearch(BaseModel):
     month: int
     year: int
 
@@ -37,7 +37,7 @@ class FinancialControlEntrySchemaToSearch():
         return str(self.__dict__)    
     
     
-class FinancialControlSchemaToSearch():
+class FinancialControlSchemaToSearch(BaseModel):
     month: int
     year: int
 
@@ -45,7 +45,7 @@ class FinancialControlSchemaToSearch():
         return str(self.__dict__)       
 
 
-class FinancialControlSchema():
+class FinancialControlSchema(BaseModel):
     month: int
     year: int
     description: str
@@ -54,7 +54,7 @@ class FinancialControlSchema():
         return str(self.__dict__)     
     
 
-class FinancialControlSummarySchema():
+class FinancialControlSummarySchema(BaseModel):
     month: int
     year: int
     revenueAmout: float
@@ -66,7 +66,7 @@ class FinancialControlSummarySchema():
         return str(self.__dict__) 
 
 
-class FinancialControlEntrySchema():
+class FinancialControlEntrySchema(BaseModel):
     month: int
     year: int
     value: float
@@ -77,14 +77,14 @@ class FinancialControlEntrySchema():
         return str(self.__dict__) 
     
 
-class FinancialControlCollectionSchema():
+class FinancialControlCollectionSchema(BaseModel):
     financialControls: List[FinancialControlSchema]
 
     def __str__(self):
         return str(self.__dict__)  
     
 
-class FinancialControlEntryCollectionSchema():
+class FinancialControlEntryCollectionSchema(BaseModel):
     financialControlEntries: List[FinancialControlEntrySchema]
 
     def __str__(self):
@@ -129,5 +129,5 @@ def showFinancialControlSummary(month:int, year:int, financialControlSummary: Fi
     return financialControlSummarySchema
 
 
-class FinancialEntryDelSchema():
+class FinancialEntryDelSchema(BaseModel):
     message: int

@@ -12,10 +12,12 @@ from model.financial_entry_category import FinancialEntryCategory
 from datetime import date
 from service.domain.entryTypeEnum import EntryType
 from service.domain.valueTypeEnum import ValueType
+from service.domain.controlStatusEnum import ControlStatus
 from service.financialEntryCategoryService import searchFinancialEntryCategoryById
 from service.financialControlService import searchFinancialControlByInitialMonthAndYear
 from service.financialControlService import searchAllFinancialControlWithNoEntries
 from service.financialControlService import deleteFinancialControl
+from service.financialControlService import insertFinancialControl
 from service.creditCardService import searchCreditCardById
 from service.financialControlEntryService import insertFinancialControlEntry
 from service.financialControlEntryService import searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId
@@ -283,3 +285,17 @@ def validateFinancialEntryData(name:str,
         creditCardObj: CreditCard = searchCreditCardById(creditCardId)
         if (not creditCardObj):
             raise BusinessRulesException('Cartão de crédito informado não encontrado !') 
+        
+
+def buildFinancialControl(month: int, 
+                           year: int) -> None:
+    
+    insertFinancialControl(month,year,ControlStatus.ABERTO)
+
+    financialEntries:List[FinancialEntry] = searchAllFinancialEntryByGivenMonthAndYear(month,year)
+
+    if (financialEntries and len(financialEntries)>0):
+
+        for financialEntry in financialEntries:
+            financialEntryDay:int = financialEntry.start_date.day()
+            insertFinancialControlEntry(month,year,financialEntry.id,financialEntry.value,date(year,month,financialEntryDay))
