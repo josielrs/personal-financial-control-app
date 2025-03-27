@@ -38,8 +38,4 @@ def create_session() -> Session:
     if not __engine:
         create_engine()
 
-    __session = sessionmaker(__engine, expire_on_commit=False, class_=Session)    
-
-    session: Session = __session
-
-    return session
+    return sessionmaker(__engine, expire_on_commit=False, class_=Session)

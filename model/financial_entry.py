@@ -20,7 +20,7 @@ class FinancialEntry(Base):
     id: int = sa.Column(sa.Numeric(16), primary_key=True, autoincrement=False, nullable=False)
     name: str = sa.Column(sa.String(256), nullable=False)
 
-    entry_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('ENTRY_TYPE.ID'), nullable=False)
+    entry_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('ENTRY_TYPE.id'), nullable=False)
     entry_type: orm.Mapped[EntryType] = orm.relationship('EntryType',lazy='joined')
 
     recurrent: int = sa.Column(sa.Numeric(1),nullable=False)
@@ -28,13 +28,13 @@ class FinancialEntry(Base):
     finish_date: date = sa.Column(sa.Date,nullable=True)
     value: float = sa.Column(sa.DECIMAL(16,4),nullable=True)
 
-    financial_entry_category_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('FINANCIAL_ENTRY_CATEGORY.ID'), nullable=False)
+    financial_entry_category_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('FINANCIAL_ENTRY_CATEGORY.id'), nullable=False)
     financial_entry_category: orm.Mapped[FinancialEntryCategory] = orm.relationship('FinancialEntryCategory',lazy='joined')
 
-    value_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('VALUE_TYPE.ID'), nullable=False)
+    value_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('VALUE_TYPE.id'), nullable=False)
     value_type: orm.Mapped[ValueType] = orm.relationship('ValueType',lazy='joined')
 
-    credit_card_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD.ID'), nullable=True)
+    credit_card_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD.id'), nullable=True)
     credit_card: orm.Mapped[CreditCard] = orm.relationship('CreditCard',lazy='joined')
 
 

@@ -26,3 +26,7 @@ class FinancialControl(Base):
     year: int = sa.Column(sa.Numeric(4), primary_key=True, autoincrement=False, nullable=False)
     description: str = sa.Column(sa.String(4000),default=financialControlDescription(month,year))
     status: str = sa.Column(sa.String(256), nullable=False)
+
+    __mapper_args__ = {
+        "primary_key":[month, year]
+    }  

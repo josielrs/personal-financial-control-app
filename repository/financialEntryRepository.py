@@ -6,12 +6,14 @@ from service.exception.businessRulesException import BusinessRulesException
 
 def getNextTableId() -> int:
 
-    result = create_session().execute(f'SELECT MAX(ID) FROM FINANCIAL_ENTRY')
-    if (result):
-        for elem in result:
-            return elem[0] + 1
-    
-    return 1
+    Session = create_session()
+    with Session() as session:
+        result = session.execute(f'SELECT MAX(ID) FROM FINANCIAL_ENTRY')
+        if (result):
+            for elem in result:
+                return elem[0] + 1
+        
+        return 1
 
 
 def insertFinancialEntry(name:str,
@@ -38,38 +40,48 @@ def insertFinancialEntry(name:str,
     newFinancialEntry.value_type_id = valueTypeId
     newFinancialEntry.credit_card_id = creditCardId
 
-    create_session().add(newFinancialEntry)
-    create_session().commit
+    Session = create_session()
+    with Session() as session:
+        session.add(newFinancialEntry)
+        session.commit
 
-    return createdId
+        return createdId
 
 
 def searchAllFinancialEntry() -> List[FinancialEntry]:
 
-    return create_session().query(FinancialEntry).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(FinancialEntry).all()
 
 
 def searchAllFinancialEntryByType(entryTypeId:int) -> List[FinancialEntry]:
 
-    return create_session().query(FinancialEntry).filter(FinancialEntry.entry_type_id == entryTypeId).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(FinancialEntry).filter(FinancialEntry.entry_type_id == entryTypeId).all()
 
 
 def searchFinancialEntryById(id:int) -> FinancialEntry:
 
-    return create_session().query(FinancialEntry).filter(FinancialEntry.id == id).first()
+    Session = create_session()
+    with Session() as session:
+        return session.query(FinancialEntry).filter(FinancialEntry.id == id).first()
 
 
 def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> List[FinancialEntry]:
 
-    query = create_session().query(FinancialEntry)
+    Session = create_session()
+    with Session() as session:
+        query = session.query(FinancialEntry)
 
-    if startDate:
-        query.filter(FinancialEntry.start_date >= startDate)
+        if startDate:
+            query.filter(FinancialEntry.start_date >= startDate)
 
-    if finishDate:
-        query.filter(FinancialEntry.finish_date <= finishDate or FinancialEntry.finish_date is None)     
+        if finishDate:
+            query.filter(FinancialEntry.finish_date <= finishDate or FinancialEntry.finish_date is None)     
 
-    return query.all()
+        return query.all()
 
 
 def updateFinancialEntry(id:int,
@@ -110,10 +122,14 @@ def updateFinancialEntry(id:int,
     if (creditCardId):        
         existingFinancialEntry.credit_card_id = creditCardId
 
-    create_session().commit
+    Session = create_session()
+    with Session() as session:
+        session.commit
 
 
 def deleteFinancialEntryById(id:int) -> None:
 
-    create_session().query(FinancialEntry).filter(FinancialEntry.id == id).delete()
-    create_session().commit     
+    Session = create_session()
+    with Session() as session:
+        session.query(FinancialEntry).filter(FinancialEntry.id == id).delete()
+        session.commit     

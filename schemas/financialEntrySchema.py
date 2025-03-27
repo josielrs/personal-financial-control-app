@@ -100,7 +100,10 @@ def showFinancialEntry(financialEntry: FinancialEntry) -> FinancialEntrySchema:
     financialEntrySchema.credit_card_desc = financialEntry.credit_card.description if financialEntry.credit_card else ''
     financialEntrySchema.description = financialEntry.description   
 
-    return financialEntrySchema
+    return {"id":financialEntry.id,
+            "name":financialEntry.name,
+            "entry_type_id":financialEntry.entry_type_id,
+            ""}
 
 
 class FinancialEntryDelSchema():

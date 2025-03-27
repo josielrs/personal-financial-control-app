@@ -16,22 +16,31 @@ def insertFinancialControlEntry(month: int,
     newFinancialControlEntry.value = value
     newFinancialControlEntry.entry_date = entryDate
 
-    create_session().add(newFinancialControlEntry)
-    create_session().commit
+    Session = create_session()
+    with Session() as session:
+        session.add(newFinancialControlEntry)
+        session.commit
+
 
 def searchAllFinancialControlEntryByMonthAndYear(month: int, year: int) -> List[FinancialControlEntry]:
 
-    return create_session().query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).all()
 
 
 def searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId(month: int, year: int, entryId: int) -> List[FinancialControlEntry]:
 
-    return create_session().query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year >= year).filter(FinancialControlEntry.financial_control_month >= month).filter(FinancialControlEntry.financial_entry_id == entryId).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year >= year).filter(FinancialControlEntry.financial_control_month >= month).filter(FinancialControlEntry.financial_entry_id == entryId).all()
 
 
 def searchAllFinancialControlEntryByFinancialEntryId(financialEntryId: int) -> List[FinancialControlEntry]:
 
-    return create_session().query(FinancialControlEntry).filter(FinancialControlEntry.financial_entry_id == financialEntryId).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_entry_id == financialEntryId).all()
 
 
 def updateFinancialControlEntry(month: int, 
@@ -52,17 +61,25 @@ def updateFinancialControlEntry(month: int,
     if (entryDate):
         existingFinancialControlEntry.entry_date = entryDate
 
-    create_session().commit
+    Session = create_session()
+    with Session() as session:
+        session.commit
+
 
 def deleteFinancialControlEntry(month: int, 
                                 year: int, 
                                 financialEntryId: int) -> None:
 
-    create_session().query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).filter(FinancialControlEntry.financial_entry_id == financialEntryId).delete()  
-    create_session().commit    
+    Session = create_session()
+    with Session() as session:
+        session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).filter(FinancialControlEntry.financial_entry_id == financialEntryId).delete()  
+        session.commit    
+
 
 def deleteAllFinancialControlEntriesByMonthAndYear(month: int, 
                                                     year: int) -> None:
 
-    create_session().query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).delete()  
-    create_session().commit       
+    Session = create_session()
+    with Session() as session:
+        session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).delete()  
+        session.commit       

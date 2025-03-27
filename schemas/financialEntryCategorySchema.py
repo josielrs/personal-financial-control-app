@@ -27,9 +27,9 @@ class FinancialEntryCategoryCollectionSchema(BaseModel):
 
 def showFinancialEntryCategorySchema(financialEntryCategory: FinancialEntryCategory) -> FinancialEntryCategorySchema:
     
-    financialEntryCategorySchema: FinancialEntryCategorySchema = FinancialEntryCategorySchema()
+    financialEntryCategorySchema: FinancialEntryCategorySchema = FinancialEntryCategorySchema(id=0,name='')
 
     financialEntryCategorySchema.id = financialEntryCategory.id
     financialEntryCategorySchema.name = financialEntryCategory.name
 
-    return financialEntryCategorySchema    
+    return {"id":financialEntryCategory.id,"name":financialEntryCategory.name}    

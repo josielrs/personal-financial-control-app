@@ -11,6 +11,8 @@ from schemas.financialEntryCategorySchema import *
 from schemas.creditCardFlagSchema import *
 from schemas.error import *
 
+from pydantic import create_model
+
 from service.exception.businessRulesException import BusinessRulesException
 from service.financialEntryService import buildFinancialControl
 from service.financialEntryService import insertFinancialEntry
@@ -492,8 +494,7 @@ def searchAllFinancialControlCategoriesData():
     try:       
         financialEntryCategories: List[FinancialEntryCategory] = searchAllFinancialEntryCategory()
 
-        financialEntryCategoryCollectionSchema: FinancialEntryCategoryCollectionSchema = FinancialEntryCategoryCollectionSchema()
-        financialEntryCategoryCollectionSchema.financialEntryCategories = []
+        financialEntryCategoryCollectionSchema: FinancialEntryCategoryCollectionSchema = FinancialEntryCategoryCollectionSchema(financialEntryCategories=[])
 
         if (financialEntryCategories and len(financialEntryCategories)>0):
             for financialEntryCategory in financialEntryCategories:
@@ -501,7 +502,7 @@ def searchAllFinancialControlCategoriesData():
 
             logger.info(f'[searchAllFinancialControlCategoriesData] - {len(financialEntryCategories)} records founded !!')                
 
-            return financialEntryCategoryCollectionSchema, 200
+            return {"financialEntryCategories":financialEntryCategoryCollectionSchema.financialEntryCategories}, 200
         else:
             return None, 204
 

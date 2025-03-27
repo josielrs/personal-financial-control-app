@@ -16,20 +16,32 @@ def insertCreditCard(name: str,
     newCreditCard.valid_year_date = year
     newCreditCard.credit_card_flag_id = creditFlagId
 
-    create_session().add(newCreditCard)
-    create_session().commit
+    Session = create_session()
+    with Session() as session:
+        session.add(newCreditCard)
+        session.commit
+
 
 def searchCreditCardByNumber(number: int) -> CreditCard:
 
-    return create_session().query(CreditCard).filter(CreditCard.number == number).first()
+    Session = create_session()
+    with Session() as session:
+        return session.query(CreditCard).filter(CreditCard.number == number).first()
+    
 
 def searchCreditCardById(id: int) -> CreditCard:
 
-    return create_session().query(CreditCard).filter(CreditCard.id == id).first()
+    Session = create_session()
+    with Session() as session:
+        return session.query(CreditCard).filter(CreditCard.id == id).first()
+    
 
 def searchAllCreditCard() -> List[CreditCard]:
 
-    return create_session().query(CreditCard).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(CreditCard).all()
+    
 
 def updateCreditCard(name: str, 
                      number: int, 
@@ -52,9 +64,14 @@ def updateCreditCard(name: str,
     if (creditFlagId):
         existingCreditCard.credit_card_flag_id = creditFlagId
 
-    create_session().commit
+    Session = create_session()
+    with Session() as session:
+        session.commit
+
 
 def deleteCreditCard(number: int):
 
-    create_session().query(CreditCard).filter(CreditCard.number == number).delete()  
-    create_session().commit    
+    Session = create_session()
+    with Session() as session:
+        session.query(CreditCard).filter(CreditCard.number == number).delete()  
+        session.commit    

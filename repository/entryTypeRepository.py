@@ -4,4 +4,6 @@ from typing import List
 
 def searchAllEntryType() -> List[EntryType]:
 
-    return create_session().query(EntryType).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(EntryType).all()

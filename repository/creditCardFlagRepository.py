@@ -4,8 +4,12 @@ from typing import List
 
 def searchAllCreditCardFlag() -> List[CreditCardFlag]:
 
-    return create_session().query(CreditCardFlag).all()
+    Session = create_session()
+    with Session() as session:
+        return session.query(CreditCardFlag).all()
 
 def searchCreditCardFlagById(id: int) -> CreditCardFlag:
 
-    return create_session().query(CreditCardFlag).filter(CreditCardFlag.id == id).first()
+    Session = create_session()
+    with Session() as session:
+        return session.query(CreditCardFlag).filter(CreditCardFlag.id == id).first()
