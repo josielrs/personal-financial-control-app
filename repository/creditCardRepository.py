@@ -19,7 +19,7 @@ def insertCreditCard(name: str,
     Session = create_session()
     with Session() as session:
         session.add(newCreditCard)
-        session.commit
+        session.commit()
 
 
 def searchCreditCardByNumber(number: int) -> CreditCard:
@@ -66,7 +66,7 @@ def updateCreditCard(name: str,
 
     Session = create_session()
     with Session() as session:
-        session.commit
+        session.commit()
 
 
 def deleteCreditCard(number: int):
@@ -74,4 +74,4 @@ def deleteCreditCard(number: int):
     Session = create_session()
     with Session() as session:
         session.query(CreditCard).filter(CreditCard.number == number).delete()  
-        session.commit    
+        session.commit() 

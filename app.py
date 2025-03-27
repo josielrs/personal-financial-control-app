@@ -54,7 +54,7 @@ financial_control_tag = Tag(name="Controle Mensal", description="Adição, visua
 auxiliar_operation_tag = Tag(name="Operações Auxiliares", description="Consulta de cadastros na base de dados")
 
 
-@app.get('/', tags=[home_tag])
+@app.get('/', summary="OpenApi Home", tags=[home_tag])
 def home():
     """Redireciona para /openapi, tela que permite a escolha do estilo de documentação.
     """
@@ -64,7 +64,7 @@ def home():
 # FINANTIAL ENTRY OPERATIONS 
 
 
-@app.post('/financialEntry', tags=[entry_tag],
+@app.post('/financialEntry', summary="Salvar Nova Movimentação Financeira", tags=[entry_tag],
           responses={"200": FinancialEntrySchema, "400": ErrorSchema, "500": ErrorSchema})
 def insertNewFinancialEntry(form:FinancialEntrySchemaToInsert):
 
@@ -91,22 +91,22 @@ def insertNewFinancialEntry(form:FinancialEntrySchemaToInsert):
         
 
 
-@app.get('/financialEntry', tags=[entry_tag],
+@app.get('/financialEntry/', summary="Obter movimentações filtradas por tipo", tags=[entry_tag],
           responses={"200": FinancialEntryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
-def searchFinancialEntries(form:FinancialEntrySchemaToSearch):
+def searchFinancialEntries(query:FinancialEntrySchemaToSearch):
 
     try:
-        if (not form):
+        if (not query):
             raise BusinessRulesException('Dados de busca não foram informados')
         
-        if (not form.entry_type_id):
+        if (not query.entry_type_id):
             raise BusinessRulesException('ID do tipo de movimentação não foi informado')     
 
-        logger.info(f'[searchFinancialEntries] - financial entry data received {form} !!')    
+        logger.info(f'[searchFinancialEntries] - financial entry data received {query} !!')    
         
         financialSchemaEntries = []
 
-        finantialEntries: List[FinancialEntry] = searchAllFinancialEntryByType(form.entry_type_id)
+        finantialEntries: List[FinancialEntry] = searchAllFinancialEntryByType(query.entry_type_id)
         if (finantialEntries and len(finantialEntries)>0):
             for financialEntry in finantialEntries:
                 financialSchemaEntries.append(showFinancialEntry(financialEntry))
@@ -115,7 +115,7 @@ def searchFinancialEntries(form:FinancialEntrySchemaToSearch):
 
             return {"financialEntries":financialSchemaEntries}, 200
         else:
-            return None,204
+            return {}, 204
 
     except BusinessRulesException as e:
         logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
@@ -126,7 +126,7 @@ def searchFinancialEntries(form:FinancialEntrySchemaToSearch):
     
 
 
-@app.patch('/financialEntry', tags=[entry_tag],
+@app.patch('/financialEntry', summary="Atualizar Movimentação Financeira", tags=[entry_tag],
           responses={"200": FinancialEntrySchema, "400": ErrorSchema, "500": ErrorSchema})
 def updateFinancialEntryData(form:FinancialEntrySchemaToUpdate):
 
@@ -154,7 +154,7 @@ def updateFinancialEntryData(form:FinancialEntrySchemaToUpdate):
 
 
 
-@app.delete('/financialEntry', tags=[entry_tag],
+@app.delete('/financialEntry', summary="Excluir Movimentação Financeira", tags=[entry_tag],
           responses={"200": FinancialEntryDelSchema, "400": ErrorSchema, "500": ErrorSchema})
 def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
 
@@ -181,7 +181,7 @@ def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
 # CREDIT CARD OPERATIONS    
 
 
-@app.post('/creditCard', tags=[credit_card_tag],
+@app.post('/creditCard', summary="Salvar Cartão de Crédito", tags=[credit_card_tag],
           responses={"200": CreditCardSchema, "400": ErrorSchema, "500": ErrorSchema})
 def insertNewCreditCard(form:CreditCardSchemaToInsert):
 
@@ -208,7 +208,7 @@ def insertNewCreditCard(form:CreditCardSchemaToInsert):
 
 
 
-@app.get('/creditCard', tags=[credit_card_tag],
+@app.get('/creditCard', summary="Obter cartões de crédito", tags=[credit_card_tag],
           responses={"200": CreditCardCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
 def searchCreditCards():
 
@@ -225,7 +225,7 @@ def searchCreditCards():
 
             return {"creditCards":creditCardSchemas}, 200
         else:
-            return None,204
+            return {}, 204
 
     except BusinessRulesException as e:
         logger.error(f'[searchCreditCards] - failed to search credit cards : {str(e)}',exc_info=True)
@@ -236,26 +236,26 @@ def searchCreditCards():
     
 
 
-@app.get('/creditCard/number', tags=[credit_card_tag],
+@app.get('/creditCard/', summary="Obter cartões de crédito pelo número",  tags=[credit_card_tag],
           responses={"200": CreditCardSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
-def searchCreditCardByGivenNumber(form:CreditCardSchemaToSearch):
+def searchCreditCardByGivenNumber(query:CreditCardSchemaToSearch):
 
     try:
-        if (not form):
+        if (not query):
             raise BusinessRulesException('Dados de busca não foram informados')
         
-        if (not form.number):
+        if (not query.number):
             raise BusinessRulesException('Numero do cartão não foi informado')     
 
-        logger.info(f'[searchCreditCardByGivenNumber] - credit card data received {form} !!')    
+        logger.info(f'[searchCreditCardByGivenNumber] - credit card data received {query} !!')    
         
-        creditCard: CreditCard = searchCreditCardByNumber(form.number)
+        creditCard: CreditCard = searchCreditCardByNumber(query.number)
 
         if (creditCard):
             logger.info(f'[searchCreditCardByGivenNumber] - credit card founded {creditCard.id} !!')
             return showCreditCard(creditCard), 200
         else:
-            return None, 204
+            return {}, 204
 
     except BusinessRulesException as e:
         logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
@@ -266,7 +266,7 @@ def searchCreditCardByGivenNumber(form:CreditCardSchemaToSearch):
 
 
 
-@app.patch('/creditCard', tags=[credit_card_tag],
+@app.patch('/creditCard', summary="Atualizar cartão de crédito",  tags=[credit_card_tag],
           responses={"200": CreditCardSchema, "400": ErrorSchema, "500": ErrorSchema})
 def updateCreditCardData(form:CreditCardSchemaToUpdate):
 
@@ -294,7 +294,7 @@ def updateCreditCardData(form:CreditCardSchemaToUpdate):
 
 
 
-@app.delete('/creditCard', tags=[credit_card_tag],
+@app.delete('/creditCard', summary="Excluir cartão de crédito",  tags=[credit_card_tag],
           responses={"200": CreditCardDelSchema, "400": ErrorSchema, "500": ErrorSchema})
 def deleteCreditCardData(form:CreditCardSchemaToDelete):
 
@@ -323,8 +323,8 @@ def deleteCreditCardData(form:CreditCardSchemaToDelete):
 
 
 
-@app.post('/financialControl', tags=[financial_control_tag],
-          responses={"200": None, "400": ErrorSchema, "500": ErrorSchema})
+@app.post('/financialControl', summary="Criar novo controle mensal", tags=[financial_control_tag],
+          responses={"200": None, "400": ErrorSchema, "500": ErrorSchema, "204": None})
 def insertNewFinancialControlMonth(form:FinancialControlSchemaToInsert):
 
     try:
@@ -337,7 +337,7 @@ def insertNewFinancialControlMonth(form:FinancialControlSchemaToInsert):
 
         logger.info(f'[insertNewFinancialControlMonth] - control created !!')
 
-        return None, 200
+        return {}, 204
 
     except BusinessRulesException as e:
         logger.error(f'[insertNewFinancialControlMonth] - failed to insert financial control : {str(e)}',exc_info=True)
@@ -348,7 +348,7 @@ def insertNewFinancialControlMonth(form:FinancialControlSchemaToInsert):
         
 
        
-@app.get('/financialControl', tags=[financial_control_tag],
+@app.get('/financialControl', summary="Obter controles mensais criados", tags=[financial_control_tag],
           responses={"200": FinancialControlCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204": None})
 def searchFinancialControls():
 
@@ -365,7 +365,7 @@ def searchFinancialControls():
             
             return {"financialControls":financialControlSchemas}, 200
         else:
-            return None, 204
+            return {}, 204
 
     except BusinessRulesException as e:
         logger.error(f'[searchFinancialControls] - failed to search financial controls : {str(e)}',exc_info=True)
@@ -376,17 +376,17 @@ def searchFinancialControls():
     
 
 
-@app.get('/financialControl/details', tags=[financial_control_tag],
+@app.get('/financialControl/', summary="Obter as Movimentações respectivas a um controle mensal", tags=[financial_control_tag],
           responses={"200": FinancialControlEntryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
-def searchAllFinancialControlEntries(form:FinancialControlEntrySchemaToSearch):
+def searchAllFinancialControlEntries(query:FinancialControlEntrySchemaToSearch):
 
     try:
-        if (not form):
+        if (not query):
             raise BusinessRulesException('Dados de busca não foram informados')
         
-        logger.info(f'[searchAllFinancialControlEntries] - method data received {form} !!')    
+        logger.info(f'[searchAllFinancialControlEntries] - method data received {query} !!')    
         
-        financialControlEntries: List[FinancialControlEntry] = searchAllFinancialControlEntryByMonthAndYear(form.month,form.year)
+        financialControlEntries: List[FinancialControlEntry] = searchAllFinancialControlEntryByMonthAndYear(query.month,query.year)
 
         financialControlEntrySchemas = []
 
@@ -398,7 +398,7 @@ def searchAllFinancialControlEntries(form:FinancialControlEntrySchemaToSearch):
 
             return {"financialControlEntries":financialControlEntrySchemas}, 200
         else:
-            return None, 204
+            return {}, 204 
 
     except BusinessRulesException as e:
         logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}',exc_info=True)
@@ -409,23 +409,23 @@ def searchAllFinancialControlEntries(form:FinancialControlEntrySchemaToSearch):
 
 
 
-@app.get('/financialControl/summary', tags=[financial_control_tag],
+@app.get('/financialControl/summary/', summary="Obter o resumo de um controle mensal", tags=[financial_control_tag],
           responses={"200": FinancialControlSummarySchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
-def searchFinancialControlSummaryData(form:FinancialControlSchemaToSearch):
+def searchFinancialControlSummaryData(query:FinancialControlSchemaToSearch):
 
     try:
-        if (not form):
+        if (not query):
             raise BusinessRulesException('Dados de busca não foram informados')
         
-        logger.info(f'[searchFinancialControlSummaryData] - financial control data received {form} !!')    
+        logger.info(f'[searchFinancialControlSummaryData] - financial control data received {query} !!')    
         
-        financialControlSummary: FinancialControlSummary = searchFinancialControlSummary(form.month,form.year)
+        financialControlSummary: FinancialControlSummary = searchFinancialControlSummary(query.month,query.year)
 
         if (financialControlSummary):
             logger.info(f'[searchFinancialControlSummaryData] - financial control summary founded !!')
             return showFinancialControlSummary(financialControlSummary), 200
         else:
-            return None, 204
+            return {}, 204
 
     except BusinessRulesException as e:
         logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}',exc_info=True)
@@ -436,8 +436,8 @@ def searchFinancialControlSummaryData(form:FinancialControlSchemaToSearch):
 
 
 
-@app.patch('/financialControl', tags=[financial_control_tag],
-          responses={"200": None, "400": ErrorSchema, "500": ErrorSchema})
+@app.patch('/financialControl', summary="Atualizar a movimentação de um controle mensal", tags=[financial_control_tag],
+          responses={"200": None, "400": ErrorSchema, "500": ErrorSchema, "204": None})
 def updateFinancialControlEntryData(form:FinancialControlEntrySchemaToUpdate):
 
     try:
@@ -450,7 +450,7 @@ def updateFinancialControlEntryData(form:FinancialControlEntrySchemaToUpdate):
       
         logger.info(f'[updateFinancialControlEntryData] - updated !!') 
 
-        return None, 200
+        return {}, 204
 
     except BusinessRulesException as e:
         logger.error(f'[updateFinancialControlEntryData] - failed to update financial control entry : {str(e)}',exc_info=True)
@@ -463,17 +463,17 @@ def updateFinancialControlEntryData(form:FinancialControlEntrySchemaToUpdate):
 # FINANCIAL CATEGORY QUERIES
 
 
-@app.get('/financialControlCategory/byEntryType', tags=[auxiliar_operation_tag],
+@app.get('/financialControlCategory/', summary="Obter as categorias por tipo de movimentação", tags=[auxiliar_operation_tag],
           responses={"200": FinancialEntryCategoryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
-def searchAllFinancialControlCategoriesByEntryTypeId(form:FinancialEntryCategorySchemaToSearch):
+def searchAllFinancialControlCategoriesByEntryTypeId(query:FinancialEntryCategorySchemaToSearch):
 
     try:
-        if (not form):
+        if (not query):
             raise BusinessRulesException('Dados de busca não foram informados')
         
-        logger.info(f'[searchAllFinancialControlCategoriesByEntryTypeId] - method data received {form} !!')    
+        logger.info(f'[searchAllFinancialControlCategoriesByEntryTypeId] - method data received {query} !!')    
         
-        financialEntryCategories: List[FinancialEntryCategory] = searchFinancialEntryCategoryByEntryTypeId(form.entry_type_id)
+        financialEntryCategories: List[FinancialEntryCategory] = searchFinancialEntryCategoryByEntryTypeId(query.entry_type_id)
 
         financialEntryCategorySchemas = []
 
@@ -485,7 +485,7 @@ def searchAllFinancialControlCategoriesByEntryTypeId(form:FinancialEntryCategory
 
             return {"financialEntryCategories":financialEntryCategorySchemas}, 200
         else:
-            return None, 204
+            return {}, 204
 
 
     except BusinessRulesException as e:
@@ -497,7 +497,7 @@ def searchAllFinancialControlCategoriesByEntryTypeId(form:FinancialEntryCategory
     
 
 
-@app.get('/financialControlCategory', tags=[auxiliar_operation_tag],
+@app.get('/financialControlCategory', summary="Obter as categorias de movimentação disponiveis",  tags=[auxiliar_operation_tag],
           responses={"200": FinancialEntryCategoryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
 def searchAllFinancialControlCategoriesData():
 
@@ -514,7 +514,7 @@ def searchAllFinancialControlCategoriesData():
 
             return {"financialEntryCategories":financialEntryCategorySchemas}, 200
         else:
-            return None, 204
+            return {}, 204
 
 
     except BusinessRulesException as e:
@@ -528,7 +528,7 @@ def searchAllFinancialControlCategoriesData():
 # CREDIT CARD FLAG QUERIES    
 
 
-@app.get('/creditCardFlag', tags=[auxiliar_operation_tag],
+@app.get('/creditCardFlag', summary="Obter as bandeiras de cartão disponiveis", tags=[auxiliar_operation_tag],
           responses={"200": CreditCardFlagCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
 def searchAllCreditCardFlagsData():
 
@@ -545,7 +545,7 @@ def searchAllCreditCardFlagsData():
 
             return {"creditCardFlags":creditCardFlagSchemas}, 200
         else:
-            return None, 204
+            return {}, 204
 
 
     except BusinessRulesException as e:

@@ -62,7 +62,7 @@ class CreditCardCollectionSchema(BaseModel):
         return str(self.__dict__)    
 
 
-def showCreditCard(creditCard: CreditCard) -> CreditCardSchema:
+def showCreditCard(creditCard: CreditCard):
     
     return {"id":creditCard.id,
             "name":creditCard.name,

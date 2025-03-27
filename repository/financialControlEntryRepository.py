@@ -19,7 +19,7 @@ def insertFinancialControlEntry(month: int,
     Session = create_session()
     with Session() as session:
         session.add(newFinancialControlEntry)
-        session.commit
+        session.commit()
 
 
 def searchAllFinancialControlEntryByMonthAndYear(month: int, year: int) -> List[FinancialControlEntry]:
@@ -63,7 +63,7 @@ def updateFinancialControlEntry(month: int,
 
     Session = create_session()
     with Session() as session:
-        session.commit
+        session.commit()
 
 
 def deleteFinancialControlEntry(month: int, 
@@ -73,7 +73,7 @@ def deleteFinancialControlEntry(month: int,
     Session = create_session()
     with Session() as session:
         session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).filter(FinancialControlEntry.financial_entry_id == financialEntryId).delete()  
-        session.commit    
+        session.commit()    
 
 
 def deleteAllFinancialControlEntriesByMonthAndYear(month: int, 
@@ -82,4 +82,4 @@ def deleteAllFinancialControlEntriesByMonthAndYear(month: int,
     Session = create_session()
     with Session() as session:
         session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).delete()  
-        session.commit       
+        session.commit()     

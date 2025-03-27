@@ -14,7 +14,7 @@ def insertFinancialControl(month: int,
     Session = create_session()
     with Session() as session:
         session.add(newFinancialControl)
-        session.commit
+        session.commit()
 
 
 def searchFinancialControlByMonthAndYear(month: int, year: int) -> FinancialControl:
@@ -66,7 +66,7 @@ def updateFinancialControlEntry(month: int,
 
     Session = create_session()
     with Session() as session:
-        session.commit
+        session.commit()
 
 
 def deleteFinancialControl(month: int, 
@@ -75,7 +75,7 @@ def deleteFinancialControl(month: int,
     Session = create_session()
     with Session() as session:
         session.query(FinancialControl).filter(FinancialControl.year == year).filter(FinancialControl.month == month).delete()  
-        session.commit    
+        session.commit()    
 
 
 def searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month:int,year:int,entryTypeId:int) -> float:

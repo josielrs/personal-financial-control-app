@@ -43,7 +43,7 @@ def insertFinancialEntry(name:str,
     Session = create_session()
     with Session() as session:
         session.add(newFinancialEntry)
-        session.commit
+        session.commit()
 
         return createdId
 
@@ -124,7 +124,7 @@ def updateFinancialEntry(id:int,
 
     Session = create_session()
     with Session() as session:
-        session.commit
+        session.commit()
 
 
 def deleteFinancialEntryById(id:int) -> None:
@@ -132,4 +132,4 @@ def deleteFinancialEntryById(id:int) -> None:
     Session = create_session()
     with Session() as session:
         session.query(FinancialEntry).filter(FinancialEntry.id == id).delete()
-        session.commit     
+        session.commit()     

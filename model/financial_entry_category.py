@@ -1,7 +1,5 @@
 import sqlalchemy as sa
-import sqlalchemy.orm as orm
 from model.base import Base
-from model.entry_type import EntryType
 
 class FinancialEntryCategory(Base):
     __tablename__: str = 'FINANCIAL_ENTRY_CATEGORY'
