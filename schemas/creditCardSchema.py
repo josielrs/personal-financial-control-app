@@ -64,18 +64,14 @@ class CreditCardCollectionSchema(BaseModel):
 
 def showCreditCard(creditCard: CreditCard) -> CreditCardSchema:
     
-    creditCardSchema: CreditCardSchema = CreditCardSchema()
-
-    creditCardSchema.id = creditCard.id
-    creditCardSchema.name = creditCard.name
-    creditCardSchema.number = creditCard.number
-    creditCardSchema.valid_month_date = creditCard.valid_month_date
-    creditCardSchema.valid_year_date = creditCard.valid_year_date
-    creditCardSchema.credit_card_flag_id = creditCard.credit_card_flag_id
-    creditCardSchema.credit_card_flag_name = creditCard.credit_card_flag.name if creditCard.credit_card_flag else ''
-    creditCardSchema.description = creditCard.description
-
-    return creditCardSchema
+    return {"id":creditCard.id,
+            "name":creditCard.name,
+            "number":creditCard.number,
+            "valid_month_date":creditCard.valid_month_date,
+            "valid_year_date":creditCard.valid_year_date,
+            "credit_card_flag_id":creditCard.credit_card_flag_id,
+            "credit_card_flag_name": '' if not creditCard.credit_card_flag else creditCard.credit_card_flag.name,
+            "description":str(creditCard)}
 
 
 class CreditCardDelSchema(BaseModel):

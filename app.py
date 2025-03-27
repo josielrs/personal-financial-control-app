@@ -60,7 +60,9 @@ def home():
     """
     return redirect('/openapi')
 
+
 # FINANTIAL ENTRY OPERATIONS 
+
 
 @app.post('/financialEntry', tags=[entry_tag],
           responses={"200": FinancialEntrySchema, "400": ErrorSchema, "500": ErrorSchema})
@@ -88,8 +90,9 @@ def insertNewFinancialEntry(form:FinancialEntrySchemaToInsert):
         return {"message":str(e)}, 500
         
 
+
 @app.get('/financialEntry', tags=[entry_tag],
-          responses={"200": FinancialEntryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema})
+          responses={"200": FinancialEntryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
 def searchFinancialEntries(form:FinancialEntrySchemaToSearch):
 
     try:
@@ -101,17 +104,18 @@ def searchFinancialEntries(form:FinancialEntrySchemaToSearch):
 
         logger.info(f'[searchFinancialEntries] - financial entry data received {form} !!')    
         
-        financialEntryCollectionSchema: FinancialEntryCollectionSchema = FinancialEntryCollectionSchema()
-        financialEntryCollectionSchema.financialEntries = []
+        financialSchemaEntries = []
 
         finantialEntries: List[FinancialEntry] = searchAllFinancialEntryByType(form.entry_type_id)
         if (finantialEntries and len(finantialEntries)>0):
             for financialEntry in finantialEntries:
-                financialEntryCollectionSchema.financialEntries.append(showFinancialEntry(financialEntry))
+                financialSchemaEntries.append(showFinancialEntry(financialEntry))
 
-        logger.info(f'[searchFinancialEntries] - {0 if not finantialEntries else len(finantialEntries)} records founded !!')                
+            logger.info(f'[searchFinancialEntries] - {0 if not finantialEntries else len(finantialEntries)} records founded !!')                
 
-        return financialEntryCollectionSchema, 200
+            return {"financialEntries":financialSchemaEntries}, 200
+        else:
+            return None,204
 
     except BusinessRulesException as e:
         logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
@@ -120,6 +124,7 @@ def searchFinancialEntries(form:FinancialEntrySchemaToSearch):
         logger.error(f'[searchFinancialEntries] - failed to search financial entries : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500
     
+
 
 @app.patch('/financialEntry', tags=[entry_tag],
           responses={"200": FinancialEntrySchema, "400": ErrorSchema, "500": ErrorSchema})
@@ -148,6 +153,7 @@ def updateFinancialEntryData(form:FinancialEntrySchemaToUpdate):
         return {"message":str(e)}, 500  
 
 
+
 @app.delete('/financialEntry', tags=[entry_tag],
           responses={"200": FinancialEntryDelSchema, "400": ErrorSchema, "500": ErrorSchema})
 def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
@@ -160,12 +166,9 @@ def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
         
         deleteFinancialEntryById(form.id)
 
-        deleteData: FinancialEntryDelSchema = FinancialEntryDelSchema()
-        deleteData.message = "Entrada excluida com sucesso."
-
         logger.info(f'[deleteFinancialEntryData] - deleted financial entry {form.id} !!') 
 
-        return deleteData, 200
+        return {"message":"Entrada excluida com sucesso."}, 200
 
     except BusinessRulesException as e:
         logger.error(f'[deleteFinancialEntryData] - failed to delete financial entry : {str(e)}',exc_info=True)
@@ -174,7 +177,9 @@ def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
         logger.error(f'[deleteFinancialEntryData] - failed to delete financial entry : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500 
     
+
 # CREDIT CARD OPERATIONS    
+
 
 @app.post('/creditCard', tags=[credit_card_tag],
           responses={"200": CreditCardSchema, "400": ErrorSchema, "500": ErrorSchema})
@@ -200,25 +205,27 @@ def insertNewCreditCard(form:CreditCardSchemaToInsert):
     except Exception as e:
         logger.error(f'[insertNewCreditCard] - failed to insert credit card : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500
-        
+
+
 
 @app.get('/creditCard', tags=[credit_card_tag],
-          responses={"200": CreditCardCollectionSchema, "400": ErrorSchema, "500": ErrorSchema})
+          responses={"200": CreditCardCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
 def searchCreditCards():
 
     try:  
         
-        creditCardCollectionSchema: CreditCardCollectionSchema = CreditCardCollectionSchema()
-        creditCardCollectionSchema.creditCards = []
+        creditCardSchemas = []
 
         creditCards: List[CreditCard] = searchAllCreditCard()
         if (creditCards and len(creditCards)>0):
             for creditCard in creditCards:
-                creditCardCollectionSchema.creditCards.append(showCreditCard(creditCard))
+                creditCardSchemas.append(showCreditCard(creditCard))
 
-        logger.info(f'[searchCreditCards] - {0 if not creditCards else len(creditCards)} records founded !!')                
+            logger.info(f'[searchCreditCards] - {0 if not creditCards else len(creditCards)} records founded !!')                
 
-        return creditCardCollectionSchema, 200
+            return {"creditCards":creditCardSchemas}, 200
+        else:
+            return None,204
 
     except BusinessRulesException as e:
         logger.error(f'[searchCreditCards] - failed to search credit cards : {str(e)}',exc_info=True)
@@ -227,6 +234,7 @@ def searchCreditCards():
         logger.error(f'[searchCreditCards] - failed to search credit cards : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500
     
+
 
 @app.get('/creditCard/number', tags=[credit_card_tag],
           responses={"200": CreditCardSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
@@ -285,6 +293,7 @@ def updateCreditCardData(form:CreditCardSchemaToUpdate):
         return {"message":str(e)}, 500  
 
 
+
 @app.delete('/creditCard', tags=[credit_card_tag],
           responses={"200": CreditCardDelSchema, "400": ErrorSchema, "500": ErrorSchema})
 def deleteCreditCardData(form:CreditCardSchemaToDelete):
@@ -297,12 +306,9 @@ def deleteCreditCardData(form:CreditCardSchemaToDelete):
         
         deleteCreditCard(form.number)
 
-        deleteData: CreditCardDelSchema = CreditCardDelSchema()
-        deleteData.message = "Entrada excluida com sucesso."
-
         logger.info(f'[deleteCreditCardData] - credit card id {form.id} !!') 
 
-        return deleteData, 200
+        return {"message":"Entrada excluida com sucesso."}, 200
 
     except BusinessRulesException as e:
         logger.error(f'[deleteCreditCardData] - failed to delete credit card : {str(e)}',exc_info=True)
@@ -312,7 +318,9 @@ def deleteCreditCardData(form:CreditCardSchemaToDelete):
         return {"message":str(e)}, 500     
 
 
+
 # FINANCIAL CONTROL OPERATIONS      
+
 
 
 @app.post('/financialControl', tags=[financial_control_tag],
@@ -338,6 +346,7 @@ def insertNewFinancialControlMonth(form:FinancialControlSchemaToInsert):
         logger.error(f'[insertNewFinancialControlMonth] - failed to insert financial control : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500
         
+
        
 @app.get('/financialControl', tags=[financial_control_tag],
           responses={"200": FinancialControlCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204": None})
@@ -345,17 +354,16 @@ def searchFinancialControls():
 
     try:  
         
-        financialControlCollectionSchema: FinancialControlCollectionSchema = FinancialControlCollectionSchema()
-        financialControlCollectionSchema.financialControls = []
+        financialControlSchemas = []
 
         financialControls: List[FinancialControl] = searchAllFinancialControl()
         if (financialControls and len(financialControls)>0):
             for financialControl in financialControls:
-                financialControlCollectionSchema.financialControls.append(showFinancialControl(financialControl))
+                financialControlSchemas.append(showFinancialControl(financialControl))
             
             logger.info(f'[searchFinancialControls] - {len(financialControls)} records founded !!') 
             
-            return financialControlCollectionSchema, 200
+            return {"financialControls":financialControlSchemas}, 200
         else:
             return None, 204
 
@@ -366,6 +374,7 @@ def searchFinancialControls():
         logger.error(f'[searchFinancialControls] - failed to search financial controls : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500
     
+
 
 @app.get('/financialControl/details', tags=[financial_control_tag],
           responses={"200": FinancialControlEntryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
@@ -379,19 +388,17 @@ def searchAllFinancialControlEntries(form:FinancialControlEntrySchemaToSearch):
         
         financialControlEntries: List[FinancialControlEntry] = searchAllFinancialControlEntryByMonthAndYear(form.month,form.year)
 
-        financialControlEntryCollectionSchema: FinancialControlEntryCollectionSchema = FinancialControlEntryCollectionSchema()
-        financialControlEntryCollectionSchema.financialControlEntries = []
+        financialControlEntrySchemas = []
 
         if (financialControlEntries and len(financialControlEntries)>0):
             for financialControlEntry in financialControlEntries:
-                financialControlEntryCollectionSchema.financialControlEntries.append(showFinancialControlEntries(financialControlEntry))
+                financialControlEntrySchemas.append(showFinancialControlEntries(financialControlEntry))
 
             logger.info(f'[searchAllFinancialControlEntries] - {len(financialControlEntries)} records founded !!')                
 
-            return financialControlEntryCollectionSchema, 200
+            return {"financialControlEntries":financialControlEntrySchemas}, 200
         else:
             return None, 204
-
 
     except BusinessRulesException as e:
         logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}',exc_info=True)
@@ -399,6 +406,7 @@ def searchAllFinancialControlEntries(form:FinancialControlEntrySchemaToSearch):
     except Exception as e:
         logger.error(f'[searchAllFinancialControlEntries] - failed to search financial entries : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500
+
 
 
 @app.get('/financialControl/summary', tags=[financial_control_tag],
@@ -414,7 +422,7 @@ def searchFinancialControlSummaryData(form:FinancialControlSchemaToSearch):
         financialControlSummary: FinancialControlSummary = searchFinancialControlSummary(form.month,form.year)
 
         if (financialControlSummary):
-            logger.info(f'[searchFinancialControlSummaryData] - credit card founded !!')
+            logger.info(f'[searchFinancialControlSummaryData] - financial control summary founded !!')
             return showFinancialControlSummary(financialControlSummary), 200
         else:
             return None, 204
@@ -451,7 +459,9 @@ def updateFinancialControlEntryData(form:FinancialControlEntrySchemaToUpdate):
         logger.error(f'[updateFinancialControlEntryData] - failed to update financial control entry : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500  
     
+
 # FINANCIAL CATEGORY QUERIES
+
 
 @app.get('/financialControlCategory/byEntryType', tags=[auxiliar_operation_tag],
           responses={"200": FinancialEntryCategoryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
@@ -465,16 +475,15 @@ def searchAllFinancialControlCategoriesByEntryTypeId(form:FinancialEntryCategory
         
         financialEntryCategories: List[FinancialEntryCategory] = searchFinancialEntryCategoryByEntryTypeId(form.entry_type_id)
 
-        financialEntryCategoryCollectionSchema: FinancialEntryCategoryCollectionSchema = FinancialEntryCategoryCollectionSchema()
-        financialEntryCategoryCollectionSchema.financialEntryCategories = []
+        financialEntryCategorySchemas = []
 
         if (financialEntryCategories and len(financialEntryCategories)>0):
             for financialEntryCategory in financialEntryCategories:
-                financialEntryCategoryCollectionSchema.financialEntryCategories.append(showFinancialEntryCategorySchema(financialEntryCategory))
+                financialEntryCategorySchemas.append(showFinancialEntryCategorySchema(financialEntryCategory))
 
             logger.info(f'[searchAllFinancialControlCategoriesByEntryTypeId] - {len(financialEntryCategories)} records founded !!')                
 
-            return financialEntryCategoryCollectionSchema, 200
+            return {"financialEntryCategories":financialEntryCategorySchemas}, 200
         else:
             return None, 204
 
@@ -487,6 +496,7 @@ def searchAllFinancialControlCategoriesByEntryTypeId(form:FinancialEntryCategory
         return {"message":str(e)}, 500
     
 
+
 @app.get('/financialControlCategory', tags=[auxiliar_operation_tag],
           responses={"200": FinancialEntryCategoryCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
 def searchAllFinancialControlCategoriesData():
@@ -494,15 +504,15 @@ def searchAllFinancialControlCategoriesData():
     try:       
         financialEntryCategories: List[FinancialEntryCategory] = searchAllFinancialEntryCategory()
 
-        financialEntryCategoryCollectionSchema: FinancialEntryCategoryCollectionSchema = FinancialEntryCategoryCollectionSchema(financialEntryCategories=[])
+        financialEntryCategorySchemas = []
 
         if (financialEntryCategories and len(financialEntryCategories)>0):
             for financialEntryCategory in financialEntryCategories:
-                financialEntryCategoryCollectionSchema.financialEntryCategories.append(showFinancialEntryCategorySchema(financialEntryCategory))
+                financialEntryCategorySchemas.append(showFinancialEntryCategorySchema(financialEntryCategory))
 
             logger.info(f'[searchAllFinancialControlCategoriesData] - {len(financialEntryCategories)} records founded !!')                
 
-            return {"financialEntryCategories":financialEntryCategoryCollectionSchema.financialEntryCategories}, 200
+            return {"financialEntryCategories":financialEntryCategorySchemas}, 200
         else:
             return None, 204
 
@@ -514,7 +524,9 @@ def searchAllFinancialControlCategoriesData():
         logger.error(f'[searchAllFinancialControlCategoriesData] - failed to search financial entries : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500    
     
+
 # CREDIT CARD FLAG QUERIES    
+
 
 @app.get('/creditCardFlag', tags=[auxiliar_operation_tag],
           responses={"200": CreditCardFlagCollectionSchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
@@ -523,16 +535,15 @@ def searchAllCreditCardFlagsData():
     try:        
         creditCardFlags: List[CreditCardFlag] = searchAllCreditCardFlag()
 
-        creditCardFlagCollectionSchema: CreditCardFlagCollectionSchema = CreditCardFlagCollectionSchema()
-        creditCardFlagCollectionSchema.creditCardFlags = []
+        creditCardFlagSchemas = []
 
         if (creditCardFlags and len(creditCardFlags)>0):
             for creditCardFlag in creditCardFlags:
-                creditCardFlagCollectionSchema.creditCardFlags.append(showCreditCardFlagSchema(creditCardFlag))
+                creditCardFlagSchemas.append(showCreditCardFlagSchema(creditCardFlag))
 
             logger.info(f'[searchAllCreditCardFlagsData] - {len(creditCardFlags)} records founded !!')                
 
-            return creditCardFlagCollectionSchema, 200
+            return {"creditCardFlags":creditCardFlagSchemas}, 200
         else:
             return None, 204
 

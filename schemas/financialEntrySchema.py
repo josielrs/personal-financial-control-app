@@ -79,31 +79,24 @@ class FinancialEntryCollectionSchema(BaseModel):
         return str(self.__dict__)    
 
 
-def showFinancialEntry(financialEntry: FinancialEntry) -> FinancialEntrySchema:
+def showFinancialEntry(financialEntry: FinancialEntry):
     
-    financialEntrySchema: FinancialEntrySchema = FinancialEntrySchema()
-
-    financialEntrySchema.id = financialEntry.id
-    financialEntrySchema.name = financialEntry.name
-    financialEntrySchema.entry_type_id = financialEntry.entry_type_id
-    financialEntrySchema.entry_type_name = financialEntry.entry_type.name if financialEntry.entry_type else ''
-    financialEntrySchema.recurrent = financialEntry.recurrent
-    financialEntrySchema.recurrent_desc = 'SIM' if financialEntry.recurrent == 1 else 'NÃO'
-    financialEntrySchema.start_date = financialEntry.start_date
-    financialEntrySchema.finish_date = financialEntry.finish_date
-    financialEntrySchema.value = financialEntry.value
-    financialEntrySchema.financial_entry_category_id = financialEntry.financial_entry_category_id
-    financialEntrySchema.financial_entry_category_name = financialEntry.financial_entry_category.name if financialEntry.financial_entry_category else ''
-    financialEntrySchema.value_type_id = financialEntry.value_type_id
-    financialEntrySchema.value_type_name = financialEntry.value_type.name if financialEntry.value_type else ''
-    financialEntrySchema.credit_card_id = financialEntry.credit_card_id
-    financialEntrySchema.credit_card_desc = financialEntry.credit_card.description if financialEntry.credit_card else ''
-    financialEntrySchema.description = financialEntry.description   
-
     return {"id":financialEntry.id,
             "name":financialEntry.name,
             "entry_type_id":financialEntry.entry_type_id,
-            ""}
+            "entry_type_name":'' if not financialEntry.entry_type else financialEntry.entry_type.name,
+            "recurrent":financialEntry.recurrent,
+            "recurrent_desc":'SIM' if financialEntry.recurrent == 1 else 'NÃO',
+            "start_date":financialEntry.start_date,
+            "finish_date":financialEntry.finish_date,
+            "value":financialEntry.value,
+            "financial_entry_category_id":financialEntry.financial_entry_category_id,
+            "financial_entry_category_name": '' if not financialEntry.financial_entry_category else financialEntry.financial_entry_category.name,
+            "value_type_id":financialEntry.value_type_id,
+            "value_type_name":'' if not financialEntry.value_type else financialEntry.value_type.name,
+            "credit_card_id":financialEntry.credit_card_id,
+            "credit_card_desc":'' if not financialEntry.credit_card else str(financialEntry.credit_card),
+            "description":str(financialEntry)}
 
 
 class FinancialEntryDelSchema():

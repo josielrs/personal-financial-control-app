@@ -20,9 +20,5 @@ class CreditCardFlagCollectionSchema(BaseModel):
 
 def showCreditCardFlagSchema(creditCardFlag: CreditCardFlag) -> CreditCardFlagSchema:
     
-    creditCardFlagSchema: CreditCardFlagSchema = CreditCardFlagSchema()
-
-    creditCardFlagSchema.id = creditCardFlag.id
-    creditCardFlagSchema.name = creditCardFlag.name
-
-    return creditCardFlagSchema
+    return {"id":creditCardFlag.id,
+            "name":creditCardFlag.name}

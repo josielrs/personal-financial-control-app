@@ -93,40 +93,28 @@ class FinancialControlEntryCollectionSchema(BaseModel):
 
 def showFinancialControl(financialControl: FinancialControl) -> FinancialControlSchema:
     
-    financialControlSchema: FinancialControlSchema = FinancialControlSchema()
-
-    financialControlSchema.month = financialControl.month  
-    financialControlSchema.year = financialControl.year
-    financialControlSchema.description = financialControl.description
-
-    return financialControlSchema
+    return {"month":financialControl.month,
+            "year":financialControl.year,
+            "description":financialControl.description}
 
 
 def showFinancialControlEntries(financialControlEntry: FinancialControlEntry) -> FinancialControlEntrySchema:
     
-    financialControlEntrySchema: FinancialControlEntrySchema = FinancialControlEntrySchema()
-
-    financialControlEntrySchema.month = financialControlEntry.financial_control_month
-    financialControlEntrySchema.year = financialControlEntry.financial_control_year
-    financialControlEntrySchema.value = financialControlEntry.value
-    financialControlEntrySchema.date = financialControlEntry.entry_date
-    financialControlEntrySchema.financialEntry = None if not financialControlEntry.financial_entry else showFinancialEntry(financialControlEntry.financial_entry)
-
-    return financialControlEntrySchema
+    return {"month":financialControlEntry.financial_control_month,
+            "year":financialControlEntry.financial_control_year,
+            "value":financialControlEntry.value,
+            "date":financialControlEntry.entry_date,
+            "financialEntry":'' if not financialControlEntry.financial_entry else showFinancialEntry(financialControlEntry.financial_entry)}
 
 
-def showFinancialControlSummary(month:int, year:int, financialControlSummary: FinancialControlSummary) -> FinancialControlSummarySchema:
+def showFinancialControlSummary(month:int, year:int, financialControlSummary: FinancialControlSummary):
 
-    financialControlSummarySchema: FinancialControlSummarySchema = FinancialControlSummarySchema()
-
-    financialControlSummarySchema.month = month
-    financialControlSummarySchema.year = year
-    financialControlSummarySchema.revenueAmout = financialControlSummary.revenueAmout
-    financialControlSummarySchema.expensesAmout = financialControlSummary.expensesAmout
-    financialControlSummarySchema.reservesAmount = financialControlSummary.reservesAmount
-    financialControlSummarySchema.difference = financialControlSummary.difference
-
-    return financialControlSummarySchema
+    return {"month":month,
+            "year":year,
+            "revenueAmout":financialControlSummary.revenueAmout,
+            "expensesAmout":financialControlSummary.expensesAmout,
+            "reservesAmount":financialControlSummary.reservesAmount,
+            "difference":financialControlSummary.difference}
 
 
 class FinancialEntryDelSchema(BaseModel):
