@@ -9,7 +9,7 @@ def hasFinancialEntriesWithCreditCard(number:int) -> int:
 
     Session = create_session()
     with Session() as session:
-        result = session.execute(text('SELECT COUNT(ID) FROM FINANCIAL_ENTRY WHERE CREDIT_CARD_NUMBER='+number))
+        result = session.execute(text(f'SELECT COUNT(id) FROM FINANCIAL_ENTRY WHERE credit_card_number={number}'))
         if (result):
             for elem in result:
                 if (elem[0] and elem[0] > 0):
