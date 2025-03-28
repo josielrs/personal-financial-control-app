@@ -18,7 +18,7 @@ from service.financialControlService import searchFinancialControlByInitialMonth
 from service.financialControlService import searchAllFinancialControlWithNoEntries
 from service.financialControlService import deleteFinancialControl
 from service.financialControlService import insertFinancialControl
-from service.creditCardService import searchCreditCardById
+from service.creditCardService import searchCreditCardByNumber
 from service.financialControlEntryService import insertFinancialControlEntry
 from service.financialControlEntryService import searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId
 from service.financialControlEntryService import updateFinancialControlEntry
@@ -41,11 +41,11 @@ def __insertFinancialEntryData__(name:str,
                                 value:float,
                                 financialEntryCategoryId:int,
                                 valueTypeId:int,
-                                creditCardId:int) -> int :
+                                creditCardNumber:int) -> int :
     
-    validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardId, False)
+    validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber, False)
         
-    id: int = insertFinancialEntryRep(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardId)
+    id: int = insertFinancialEntryRep(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber)
 
     # inserindo a movimentação dos controles mensais já criados
     financialControls: List[FinancialControl] = searchFinancialControlByInitialMonthAndYear(startDate.month,startDate.year)
@@ -64,9 +64,9 @@ def insertFinancialEntry(name:str,
                          value:float,
                          financialEntryCategoryId:int,
                          valueTypeId:int,
-                         creditCardId:int) -> FinancialEntry:
+                         creditCardNumber:int) -> FinancialEntry:
       
-    id: int = __insertFinancialEntryData__(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardId)
+    id: int = __insertFinancialEntryData__(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber)
 
     return searchFinancialEntryById(id)
 
@@ -77,7 +77,7 @@ def insertFinancialEntryByObject(financialEntry: FinancialEntry) -> FinancialEnt
         raise BusinessRulesException('Nenhuma movimentação finaceira foi informada para inserção !')
     
     id: int = __insertFinancialEntryData__(financialEntry.name,financialEntry.entry_type_id, financialEntry.recurrent,financialEntry.start_date,financialEntry.finish_date,
-                               financialEntry.value,financialEntry.financial_entry_category_id,financialEntry.value_type_id,financialEntry.credit_card_id,False);
+                               financialEntry.value,financialEntry.financial_entry_category_id,financialEntry.value_type_id,financialEntry.credit_card_number,False);
 
     return searchFinancialEntryById(id)
 
@@ -140,16 +140,16 @@ def updateFinancialEntry(id:int,
                          value:float,
                          financialEntryCategoryId:int,
                          valueTypeId:int,
-                         creditCardId:int) -> FinancialEntry:
+                         creditCardNumber:int) -> FinancialEntry:
     
     if (not id):
         raise BusinessRulesException('ID da Movimentação Financeira deve ser informado.')
     
     existingFinancialEntry : FinancialEntry = searchFinancialEntryById(id)
 
-    validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardId, True, existingFinancialEntry, id)
+    validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber, True, existingFinancialEntry, id)
 
-    updateFinancialEntryRep(id,name,entryTypeId,recurrent,startDate,finishDate,value,financialEntryCategoryId,valueTypeId,creditCardId)
+    updateFinancialEntryRep(id,name,entryTypeId,recurrent,startDate,finishDate,value,financialEntryCategoryId,valueTypeId,creditCardNumber)
     
     isFixValueChanged: bool = (value and (ValueType.FIXO.value == existingFinancialEntry.value_type_id) and (value != existingFinancialEntry.value))
 
@@ -195,7 +195,7 @@ def validateFinancialEntryData(name:str,
                                value:float,
                                financialEntryCategoryId:int,
                                valueTypeId:int,
-                               creditCardId:int,
+                               creditCardNumber:int,
                                isUpdate: bool,
                                financialEntry: FinancialEntry,
                                id: int) -> None:
@@ -277,12 +277,12 @@ def validateFinancialEntryData(name:str,
     if (valueTypeId and ValueType.FIXO.value == valueTypeId and not value and not isUpdate):
         raise BusinessRulesException('A movimentação financeira com valor fixo deve ter um valor informado já no cadastro !')
     
-    if (creditCardId):
+    if (creditCardNumber):
 
         if (not EntryType.DESPESA.value == entryTypeId):
             raise BusinessRulesException('Cartão de crédito deve ser informado apenas em movimentações de DESPESA !')
 
-        creditCardObj: CreditCard = searchCreditCardById(creditCardId)
+        creditCardObj: CreditCard = searchCreditCardByNumber(creditCardNumber)
         if (not creditCardObj):
             raise BusinessRulesException('Cartão de crédito informado não encontrado !') 
         

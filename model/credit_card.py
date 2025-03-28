@@ -6,7 +6,7 @@ from model.credit_card_flag import CreditCardFlag
 class CreditCard(Base):
     __tablename__: str = 'CREDIT_CARD'
 
-    id: int = sa.Column(sa.Numeric(16), primary_key=True, autoincrement=True, nullable=False)
+    id: int = sa.Column(sa.BigInteger, primary_key=True, nullable=False)
     name: str = sa.Column(sa.String(256), nullable=False)
     number: int = sa.Column(sa.Numeric(16), nullable=False)
     valid_month_date: int = sa.Column(sa.Numeric(2), nullable=False)

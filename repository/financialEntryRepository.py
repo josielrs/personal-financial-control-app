@@ -1,4 +1,5 @@
 from conf.db_session import create_session
+from sqlalchemy.sql import text
 from model.financial_entry import FinancialEntry
 from typing import List
 from datetime import date
@@ -8,10 +9,11 @@ def getNextTableId() -> int:
 
     Session = create_session()
     with Session() as session:
-        result = session.execute(f'SELECT MAX(ID) FROM FINANCIAL_ENTRY')
+        result = session.execute(text('SELECT MAX(ID) FROM FINANCIAL_ENTRY'))
         if (result):
             for elem in result:
-                return elem[0] + 1
+                if (elem[0]):
+                    return elem[0] + 1
         
         return 1
 
@@ -24,7 +26,7 @@ def insertFinancialEntry(name:str,
                          value:float,
                          financialEntryCategoryId:int,
                          valueTypeId:int,
-                         creditCardId:int) -> int:
+                         creditCardNumber:int) -> int:
     
     createdId:int = getNextTableId()
 
@@ -38,7 +40,7 @@ def insertFinancialEntry(name:str,
     newFinancialEntry.value = value
     newFinancialEntry.financial_entry_category_id = financialEntryCategoryId
     newFinancialEntry.value_type_id = valueTypeId
-    newFinancialEntry.credit_card_id = creditCardId
+    newFinancialEntry.credit_card_number = creditCardNumber
 
     Session = create_session()
     with Session() as session:
@@ -93,37 +95,39 @@ def updateFinancialEntry(id:int,
                          value:float,
                          financialEntryCategoryId:int,
                          valueTypeId:int,
-                         creditCardId:int) -> None:
+                         creditCardNumber:int) -> None:
     
     if (not id):
         raise BusinessRulesException('ID da Movimentação Financeira deve ser informado.')
     
-    existingFinancialEntry : FinancialEntry = searchFinancialEntryById(id)
-
-    if (not existingFinancialEntry):
-        raise BusinessRulesException(f'Movimentação Financeira não encontrada com esse identificador:{id}')
-
-    if (name):
-        existingFinancialEntry.name = name
-    if (entryTypeId):        
-        existingFinancialEntry.entry_type_id = entryTypeId
-    if (recurrent):
-        existingFinancialEntry.recurrent = recurrent
-    if (startDate):        
-        existingFinancialEntry.start_date = startDate
-    if (finishDate):    
-        existingFinancialEntry.finish_date = finishDate
-    if (value):        
-        existingFinancialEntry.value = value
-    if (financialEntryCategoryId):    
-        existingFinancialEntry.financial_entry_category_id = financialEntryCategoryId
-    if (valueTypeId):        
-        existingFinancialEntry.value_type_id = valueTypeId
-    if (creditCardId):        
-        existingFinancialEntry.credit_card_id = creditCardId
 
     Session = create_session()
     with Session() as session:
+
+        existingFinancialEntry : FinancialEntry = session.query(FinancialEntry).filter(FinancialEntry.id == id).first()
+
+        if (not existingFinancialEntry):
+            raise BusinessRulesException(f'Movimentação Financeira não encontrada com esse identificador:{id}')
+
+        if (name):
+            existingFinancialEntry.name = name
+        if (entryTypeId):        
+            existingFinancialEntry.entry_type_id = entryTypeId
+        if (recurrent):
+            existingFinancialEntry.recurrent = recurrent
+        if (startDate):        
+            existingFinancialEntry.start_date = startDate
+        if (finishDate):    
+            existingFinancialEntry.finish_date = finishDate
+        if (value):        
+            existingFinancialEntry.value = value
+        if (financialEntryCategoryId):    
+            existingFinancialEntry.financial_entry_category_id = financialEntryCategoryId
+        if (valueTypeId):        
+            existingFinancialEntry.value_type_id = valueTypeId
+        if (creditCardNumber):        
+            existingFinancialEntry.credit_card_number = creditCardNumber
+
         session.commit()
 
 

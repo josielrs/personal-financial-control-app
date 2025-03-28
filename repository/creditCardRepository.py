@@ -1,7 +1,33 @@
 from conf.db_session import create_session
+from sqlalchemy.sql import text
 from model.credit_card import CreditCard
 from typing import List
 from service.exception.businessRulesException import BusinessRulesException
+
+
+def hasFinancialEntriesWithCreditCard(number:int) -> int:
+
+    Session = create_session()
+    with Session() as session:
+        result = session.execute(text('SELECT COUNT(ID) FROM FINANCIAL_ENTRY WHERE CREDIT_CARD_NUMBER='+number))
+        if (result):
+            for elem in result:
+                if (elem[0] and elem[0] > 0):
+                    return elem[0]
+        
+        return 0
+
+def getNextTableId() -> int:
+
+    Session = create_session()
+    with Session() as session:
+        result = session.execute(text('SELECT MAX(ID) FROM CREDIT_CARD'))
+        if (result):
+            for elem in result:
+                if (elem[0]):
+                    return elem[0] + 1
+        
+        return 1
 
 def insertCreditCard(name: str, 
                      number: int, 
@@ -10,6 +36,7 @@ def insertCreditCard(name: str,
                      creditFlagId: int) -> None:
     
     newCreditCard : CreditCard = CreditCard()
+    newCreditCard.id = getNextTableId()
     newCreditCard.name = name
     newCreditCard.number = number
     newCreditCard.valid_month_date = month
@@ -49,23 +76,24 @@ def updateCreditCard(name: str,
                      year: int, 
                      creditFlagId: int) -> None:
     
-    existingCreditCard : CreditCard = searchCreditCardByNumber(number)
-    if (not existingCreditCard):
-        raise BusinessRulesException(f'Cartão de crédito não encontrato com o numero {number}')
-
-    if (name):
-        existingCreditCard.name = name
-    if (number):
-        existingCreditCard.number = number
-    if (month):
-        existingCreditCard.valid_month_date = month
-    if (year):
-        existingCreditCard.valid_year_date = year
-    if (creditFlagId):
-        existingCreditCard.credit_card_flag_id = creditFlagId
-
     Session = create_session()
     with Session() as session:
+
+        existingCreditCard : CreditCard = session.query(CreditCard).filter(CreditCard.number == number).first()
+
+        if (not existingCreditCard):
+            raise BusinessRulesException(f'Cartão de crédito não encontrato com o numero {number}')    
+        if (name):
+            existingCreditCard.name = name
+        if (number):
+            existingCreditCard.number = number
+        if (month):
+            existingCreditCard.valid_month_date = month
+        if (year):
+            existingCreditCard.valid_year_date = year
+        if (creditFlagId):
+            existingCreditCard.credit_card_flag_id = creditFlagId    
+
         session.commit()
 
 

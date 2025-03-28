@@ -17,7 +17,7 @@ def calculateMonthNumber(d1:date, d2:date) -> int:
 class FinancialEntry(Base):
     __tablename__: str = 'FINANCIAL_ENTRY'
 
-    id: int = sa.Column(sa.Numeric(16), primary_key=True, autoincrement=False, nullable=False)
+    id: int = sa.Column(sa.Numeric(16), primary_key=True, nullable=False)
     name: str = sa.Column(sa.String(256), nullable=False)
 
     entry_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('ENTRY_TYPE.id'), nullable=False)
@@ -34,7 +34,7 @@ class FinancialEntry(Base):
     value_type_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('VALUE_TYPE.id'), nullable=False)
     value_type: orm.Mapped[ValueType] = orm.relationship('ValueType',lazy='joined')
 
-    credit_card_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD.id'), nullable=True)
+    credit_card_number: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD.number'), nullable=True)
     credit_card: orm.Mapped[CreditCard] = orm.relationship('CreditCard',lazy='joined')
 
 

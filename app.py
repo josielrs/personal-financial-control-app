@@ -219,6 +219,7 @@ def searchCreditCards():
         creditCards: List[CreditCard] = searchAllCreditCard()
         if (creditCards and len(creditCards)>0):
             for creditCard in creditCards:
+                logger.info(creditCard)
                 creditCardSchemas.append(showCreditCard(creditCard))
 
             logger.info(f'[searchCreditCards] - {0 if not creditCards else len(creditCards)} records founded !!')                
@@ -276,7 +277,7 @@ def updateCreditCardData(form:CreditCardSchemaToUpdate):
         
         logger.info(f'[updateCreditCardData] - credit card data received {form} !!') 
         
-        creditCard: CreditCard = updateCreditCard(form.name,form.number,form.month,form.valid_year_date,form.credit_card_flag_id)
+        creditCard: CreditCard = updateCreditCard(form.name,form.number,form.valid_month_date,form.valid_year_date,form.credit_card_flag_id)
 
         if (not creditCard):
             raise Exception('Cartão de Credito não retornado!')
@@ -306,7 +307,7 @@ def deleteCreditCardData(form:CreditCardSchemaToDelete):
         
         deleteCreditCard(form.number)
 
-        logger.info(f'[deleteCreditCardData] - credit card id {form.id} !!') 
+        logger.info(f'[deleteCreditCardData] - credit card id {form.number} !!') 
 
         return {"message":"Entrada excluida com sucesso."}, 200
 

@@ -49,20 +49,21 @@ def updateFinancialControlEntry(month: int,
                                 value: float,
                                 entryDate: date) -> None:
     
-    existingFinancialControlEntry : FinancialControlEntry = create_session().query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).filter(FinancialControlEntry.financial_entry_id == financialEntryId).first()
-    if (not existingFinancialControlEntry):
-        raise RuntimeError(f'Financial Control Entry not found with month:{month} year:{year} and financialEntryId:{financialEntryId}')
-
-    existingFinancialControlEntry.financial_control_month = month
-    existingFinancialControlEntry.financial_control_year = year
-    existingFinancialControlEntry.financial_entry_id = financialEntryId
-    if (value):
-        existingFinancialControlEntry.value = value
-    if (entryDate):
-        existingFinancialControlEntry.entry_date = entryDate
-
     Session = create_session()
-    with Session() as session:
+    with Session() as session:    
+    
+        existingFinancialControlEntry : FinancialControlEntry = session.query(FinancialControlEntry).filter(FinancialControlEntry.financial_control_year == year).filter(FinancialControlEntry.financial_control_month == month).filter(FinancialControlEntry.financial_entry_id == financialEntryId).first()
+        if (not existingFinancialControlEntry):
+            raise RuntimeError(f'Financial Control Entry not found with month:{month} year:{year} and financialEntryId:{financialEntryId}')
+
+        existingFinancialControlEntry.financial_control_month = month
+        existingFinancialControlEntry.financial_control_year = year
+        existingFinancialControlEntry.financial_entry_id = financialEntryId
+        if (value):
+            existingFinancialControlEntry.value = value
+        if (entryDate):
+            existingFinancialControlEntry.entry_date = entryDate
+
         session.commit()
 
 

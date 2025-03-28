@@ -4,6 +4,7 @@ from repository.creditCardRepository import updateCreditCard as updateCreditCard
 from repository.creditCardRepository import searchCreditCardByNumber as searchCreditCardByNumberRep
 from repository.creditCardRepository import searchAllCreditCard as searchAllCreditCardRep
 from repository.creditCardRepository import searchCreditCardById as searchCreditCardByIdRep
+from repository.creditCardRepository import hasFinancialEntriesWithCreditCard
 from service.creditCardFlagService import searchCreditCardFlagById
 from typing import List
 from model.credit_card_flag import CreditCardFlag
@@ -59,6 +60,9 @@ def deleteCreditCard(number: int):
     existingCreditCard: CreditCard = searchCreditCardByNumber(number)
     if (not existingCreditCard):
         raise RuntimeError(f'Cartão de crédito de numero {number} não existe na base de dados.')
+    
+    if (hasFinancialEntriesWithCreditCard(number) > 0):
+        raise RuntimeError(f'Cartão de crédito de numero {number} está associado a movimentações financeiras.')
 
     deleteCreditCardRep(number)
 

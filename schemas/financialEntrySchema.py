@@ -18,7 +18,7 @@ class FinancialEntrySchemaToInsert(BaseModel):
     value: float
     financial_entry_category_id: int
     value_type_id: int
-    credit_card_id: int
+    credit_card_number: int
 
     def __str__(self):
         return str(self.__dict__)    
@@ -30,7 +30,7 @@ class FinancialEntrySchemaToUpdate(BaseModel):
     finish_date: date
     value: float
     financial_entry_category_id: int
-    credit_card_id: int
+    credit_card_number: int
 
     def __str__(self):
         return str(self.__dict__)
@@ -64,7 +64,7 @@ class FinancialEntrySchema(BaseModel):
     financial_entry_category_name: str
     value_type_id: int
     value_type_name: str
-    credit_card_id: int
+    credit_card_number: int
     credit_card_desc: str
     description: str  
 
@@ -94,7 +94,7 @@ def showFinancialEntry(financialEntry: FinancialEntry):
             "financial_entry_category_name": '' if not financialEntry.financial_entry_category else financialEntry.financial_entry_category.name,
             "value_type_id":financialEntry.value_type_id,
             "value_type_name":'' if not financialEntry.value_type else financialEntry.value_type.name,
-            "credit_card_id":financialEntry.credit_card_id,
+            "credit_card_number":financialEntry.credit_card_number,
             "credit_card_desc":'' if not financialEntry.credit_card else str(financialEntry.credit_card),
             "description":str(financialEntry)}
 
