@@ -74,7 +74,7 @@ def insertNewFinancialEntry(form:FinancialEntrySchemaToInsert):
         
         logger.info(f'[insertNewFinancialEntry] - financial entry data received {form} !!')    
         
-        financialEntry: FinancialEntry = insertFinancialEntry(form.name,form.entry_type_id,form.recurrent,form.start_date,form.finish_date,form.value,form.financial_entry_category_id,form.value_type_id,form.credit_card_id)
+        financialEntry: FinancialEntry = insertFinancialEntry(form.name,form.entry_type_id,form.recurrent,form.start_date,form.finish_date,form.value,form.financial_entry_category_id,form.value_type_id,form.credit_card_number)
 
         if (not financialEntry):
             raise Exception('Movimentação não retornada!')
@@ -424,7 +424,7 @@ def searchFinancialControlSummaryData(query:FinancialControlSchemaToSearch):
 
         if (financialControlSummary):
             logger.info(f'[searchFinancialControlSummaryData] - financial control summary founded !!')
-            return showFinancialControlSummary(financialControlSummary), 200
+            return showFinancialControlSummary(query.month, query.year,financialControlSummary), 200
         else:
             return {}, 204
 

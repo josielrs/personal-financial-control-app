@@ -48,7 +48,7 @@ CREATE TABLE FINANCIAL_ENTRY
  value NUMBER(16,4),  
  financial_entry_category_id NUMBER(16) NOT NULL,  
  value_type_id NUMBER(16) NOT NULL,
- credit_card_id NUMBER(16),
+ credit_card_number NUMBER(16),
  FOREIGN KEY(entry_type_id) REFERENCES ENTRY_TYPE(id),
  FOREIGN KEY(financial_entry_category_id) REFERENCES FINANCIAL_ENTRY_CATEGORY(id),
  FOREIGN KEY(value_type_id) REFERENCES VALUE_TYPE(id),
