@@ -8,10 +8,10 @@ class CreditCard(Base):
 
     id: int = sa.Column(sa.BigInteger, primary_key=True, nullable=False)
     name: str = sa.Column(sa.String(256), nullable=False)
-    number: int = sa.Column(sa.Numeric(16), nullable=False)
-    valid_month_date: int = sa.Column(sa.Numeric(2), nullable=False)
-    valid_year_date: int = sa.Column(sa.Numeric(4), nullable=False)
-    credit_card_flag_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('CREDIT_CARD_FLAG.id'), nullable=False)
+    number: int = sa.Column(sa.BigInteger, nullable=False)
+    valid_month_date: int = sa.Column(sa.Integer, nullable=False)
+    valid_year_date: int = sa.Column(sa.Integer, nullable=False)
+    credit_card_flag_id: int = sa.Column(sa.BigInteger, sa.ForeignKey('CREDIT_CARD_FLAG.id'), nullable=False)
     credit_card_flag: orm.Mapped[CreditCardFlag] = orm.relationship('CreditCardFlag',lazy='joined')
 
     def __str__(self):

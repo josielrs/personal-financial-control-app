@@ -1,5 +1,6 @@
 from conf.db_session import create_session
 from sqlalchemy.sql import text
+from sqlalchemy import or_
 from model.financial_entry import FinancialEntry
 from typing import List
 from datetime import date
@@ -81,7 +82,7 @@ def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> List[Fina
             query.filter(FinancialEntry.start_date >= startDate)
 
         if finishDate:
-            query.filter(FinancialEntry.finish_date <= finishDate or FinancialEntry.finish_date is None)     
+            query.filter(or_(FinancialEntry.finish_date <= finishDate,FinancialEntry.finish_date is None))     
 
         return query.all()
 
@@ -126,7 +127,7 @@ def updateFinancialEntry(id:int,
         if (valueTypeId):        
             existingFinancialEntry.value_type_id = valueTypeId
         if (creditCardNumber):        
-            existingFinancialEntry.credit_card_number = creditCardNumber
+            existingFinancialEntry.credit_card_number = creditCardNumber if creditCardNumber != -1 else None
 
         session.commit()
 

@@ -22,8 +22,8 @@ def financialControlDescription(m:int,y:int) -> str:
 class FinancialControl(Base):
     __tablename__: str = 'FINANCIAL_CONTROL'
 
-    month: int = sa.Column(sa.Numeric(2), primary_key=True, nullable=False)
-    year: int = sa.Column(sa.Numeric(4), primary_key=True, nullable=False)
+    month: int = sa.Column(sa.Integer, primary_key=True, nullable=False)
+    year: int = sa.Column(sa.Integer, primary_key=True, nullable=False)
     description: str = sa.Column(sa.String(4000),default=financialControlDescription(month,year))
     status: str = sa.Column(sa.String(256), nullable=False)
 

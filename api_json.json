@@ -1,0 +1,1990 @@
+{
+"components": {
+"schemas": {
+"CreditCardCollectionSchema": {
+"properties": {
+"creditCards": {
+"description": "Lista de Cartão de Crédito.",
+"items": {
+"$ref": "#/components/schemas/CreditCardSchema"
+},
+"title": "Creditcards",
+"type": "array"
+}
+},
+"required": [
+"creditCards"
+],
+"title": "CreditCardCollectionSchema",
+"type": "object"
+},
+"CreditCardDelSchema": {
+"properties": {
+"message": {
+"title": "Message",
+"type": "integer"
+}
+},
+"required": [
+"message"
+],
+"title": "CreditCardDelSchema",
+"type": "object"
+},
+"CreditCardFlagCollectionSchema": {
+"properties": {
+"creditCardFlags": {
+"description": "Lista de bandeiras de cartões de Crédito.",
+"items": {
+"$ref": "#/components/schemas/CreditCardFlagSchema"
+},
+"title": "Creditcardflags",
+"type": "array"
+}
+},
+"required": [
+"creditCardFlags"
+],
+"title": "CreditCardFlagCollectionSchema",
+"type": "object"
+},
+"CreditCardFlagSchema": {
+"properties": {
+"id": {
+"description": "ID da bandeira do cartão.",
+"title": "Id",
+"type": "integer"
+},
+"name": {
+"description": "Nome da Bandeira do Cartão.",
+"maxLength": 256,
+"title": "Name",
+"type": "string"
+}
+},
+"required": [
+"id",
+"name"
+],
+"title": "CreditCardFlagSchema",
+"type": "object"
+},
+"CreditCardSchema": {
+"properties": {
+"credit_card_flag_id": {
+"description": "ID da Bandeira do Cartão.",
+"title": "Credit Card Flag Id",
+"type": "integer"
+},
+"credit_card_flag_name": {
+"description": "Nome da Bandeira do Cartão.",
+"title": "Credit Card Flag Name",
+"type": "string"
+},
+"description": {
+"description": "Descrição do Cartão de Crédito.",
+"title": "Description",
+"type": "string"
+},
+"id": {
+"description": "ID do Cartão de Crédito.",
+"title": "Id",
+"type": "integer"
+},
+"name": {
+"description": "Nome designado para o cartão de credito",
+"maxLength": 256,
+"title": "Name",
+"type": "string"
+},
+"number": {
+"description": "Número do cartão de crédito",
+"title": "Number",
+"type": "integer"
+},
+"valid_month_date": {
+"description": "Mês de Validade do Cartão.",
+"title": "Valid Month Date",
+"type": "integer"
+},
+"valid_year_date": {
+"description": "Ano de Validade do Cartão.",
+"title": "Valid Year Date",
+"type": "integer"
+}
+},
+"required": [
+"id",
+"name",
+"number",
+"valid_month_date",
+"valid_year_date",
+"credit_card_flag_id",
+"credit_card_flag_name",
+"description"
+],
+"title": "CreditCardSchema",
+"type": "object"
+},
+"CreditCardSchemaToDelete": {
+"properties": {
+"number": {
+"description": "Número do cartão de crédito para deletar.",
+"title": "Number",
+"type": "integer"
+}
+},
+"required": [
+"number"
+],
+"title": "CreditCardSchemaToDelete",
+"type": "object"
+},
+"CreditCardSchemaToInsert": {
+"properties": {
+"credit_card_flag_id": {
+"description": "ID da Bandeira do Cartão.",
+"title": "Credit Card Flag Id",
+"type": "integer"
+},
+"name": {
+"description": "Nome designado para o cartão de credito",
+"maxLength": 256,
+"title": "Name",
+"type": "string"
+},
+"number": {
+"description": "Número do cartão de crédito",
+"title": "Number",
+"type": "integer"
+},
+"valid_month_date": {
+"description": "Mês de Validade do Cartão.",
+"title": "Valid Month Date",
+"type": "integer"
+},
+"valid_year_date": {
+"description": "Ano de Validade do Cartão.",
+"title": "Valid Year Date",
+"type": "integer"
+}
+},
+"required": [
+"name",
+"number",
+"valid_month_date",
+"valid_year_date",
+"credit_card_flag_id"
+],
+"title": "CreditCardSchemaToInsert",
+"type": "object"
+},
+"CreditCardSchemaToUpdate": {
+"properties": {
+"credit_card_flag_id": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "ID da Bandeira do Cartão a ser alterado.",
+"title": "Credit Card Flag Id"
+},
+"name": {
+"anyOf": [
+{
+"maxLength": 256,
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Nome a ser alterado ppara o cartão de credito",
+"title": "Name"
+},
+"number": {
+"description": "Número do cartão de crédito para alterar.",
+"title": "Number",
+"type": "integer"
+},
+"valid_month_date": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Mês de Validade do Cartão a ser alterado.",
+"title": "Valid Month Date"
+},
+"valid_year_date": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Ano de Validade do Cartão a ser alterado.",
+"title": "Valid Year Date"
+}
+},
+"required": [
+"number"
+],
+"title": "CreditCardSchemaToUpdate",
+"type": "object"
+},
+"ErrorSchema": {
+"description": "Define como uma mensagem de eero será representada\n    ",
+"properties": {
+"message": {
+"description": "Mensagem de erro, motivo da falha no processamento.",
+"title": "Message",
+"type": "string"
+}
+},
+"required": [
+"message"
+],
+"title": "ErrorSchema",
+"type": "object"
+},
+"FinancialControlCollectionSchema": {
+"properties": {
+"financialControls": {
+"description": "Lista de controles financeiros.",
+"items": {
+"$ref": "#/components/schemas/FinancialControlSchema"
+},
+"title": "Financialcontrols",
+"type": "array"
+}
+},
+"required": [
+"financialControls"
+],
+"title": "FinancialControlCollectionSchema",
+"type": "object"
+},
+"FinancialControlEntryCollectionSchema": {
+"properties": {
+"financialControlEntries": {
+"description": "Lista de movimentações do mes/ano de referencia do controle financeiro.",
+"items": {
+"$ref": "#/components/schemas/FinancialControlEntrySchema"
+},
+"title": "Financialcontrolentries",
+"type": "array"
+}
+},
+"required": [
+"financialControlEntries"
+],
+"title": "FinancialControlEntryCollectionSchema",
+"type": "object"
+},
+"FinancialControlEntrySchema": {
+"properties": {
+"entryDate": {
+"description": "Data da movimentação no controle financeiro.",
+"format": "date",
+"title": "Entrydate",
+"type": "string"
+},
+"financialEntry": {
+"$ref": "#/components/schemas/FinancialEntrySchema",
+"description": "Dados da movimentação financeira."
+},
+"month": {
+"description": "Mês de referencia da movimentação no controle financeiro.",
+"title": "Month",
+"type": "integer"
+},
+"value": {
+"description": "Valor da movimentação no controle financeiro.",
+"title": "Value",
+"type": "number"
+},
+"year": {
+"description": "Ano de referencia da movimentação no controle financeiro.",
+"title": "Year",
+"type": "integer"
+}
+},
+"required": [
+"month",
+"year",
+"value",
+"entryDate",
+"financialEntry"
+],
+"title": "FinancialControlEntrySchema",
+"type": "object"
+},
+"FinancialControlEntrySchemaToUpdate": {
+"properties": {
+"financialEntryId": {
+"description": "ID da movimentação que deseja alterar.",
+"title": "Financialentryid",
+"type": "integer"
+},
+"month": {
+"description": "Mês de referencia do Controle Financeiro que deseja alterar.",
+"title": "Month",
+"type": "integer"
+},
+"value": {
+"description": "Valor a ser alterado.",
+"title": "Value",
+"type": "number"
+},
+"year": {
+"description": "Ano de referencia do Controle Financeiro que deseja alterar.",
+"title": "Year",
+"type": "integer"
+}
+},
+"required": [
+"month",
+"year",
+"financialEntryId",
+"value"
+],
+"title": "FinancialControlEntrySchemaToUpdate",
+"type": "object"
+},
+"FinancialControlSchema": {
+"properties": {
+"description": {
+"description": "Descritivo do Controle Financeiro.",
+"title": "Description",
+"type": "string"
+},
+"month": {
+"description": "Mês de referencia do Controle Financeiro.",
+"title": "Month",
+"type": "integer"
+},
+"year": {
+"description": "Ano de referencia do Controle Financeiro.",
+"title": "Year",
+"type": "integer"
+}
+},
+"required": [
+"month",
+"year",
+"description"
+],
+"title": "FinancialControlSchema",
+"type": "object"
+},
+"FinancialControlSchemaToInsert": {
+"properties": {
+"month": {
+"description": "Mês de referencia do Controle Financeiro.",
+"title": "Month",
+"type": "integer"
+},
+"year": {
+"description": "Ano de referencia do Controle Financeiro.",
+"title": "Year",
+"type": "integer"
+}
+},
+"required": [
+"month",
+"year"
+],
+"title": "FinancialControlSchemaToInsert",
+"type": "object"
+},
+"FinancialControlSummarySchema": {
+"properties": {
+"difference": {
+"description": "Valor restante para o mês de referencia. RECEITAS - (DESPESAS + RESERVAS)",
+"title": "Difference",
+"type": "number"
+},
+"expensesAmout": {
+"description": "Valor total de DESPESAS do mês de referencia.",
+"title": "Expensesamout",
+"type": "number"
+},
+"month": {
+"description": "Mês de referencia do Controle Financeiro que deseja busca.",
+"title": "Month",
+"type": "integer"
+},
+"reservesAmount": {
+"description": "Valor total de RESERVAS do mês de referencia.",
+"title": "Reservesamount",
+"type": "number"
+},
+"revenueAmout": {
+"description": "Valor total de RECEITAS do mês de referencia.",
+"title": "Revenueamout",
+"type": "number"
+},
+"year": {
+"description": "Ano de referencia do Controle Financeiro que deseja busca.",
+"title": "Year",
+"type": "integer"
+}
+},
+"required": [
+"month",
+"year",
+"revenueAmout",
+"expensesAmout",
+"reservesAmount",
+"difference"
+],
+"title": "FinancialControlSummarySchema",
+"type": "object"
+},
+"FinancialEntryCategoryCollectionSchema": {
+"properties": {
+"financialEntryCategories": {
+"description": "Lista de categoria de movimentação financeira.",
+"items": {
+"$ref": "#/components/schemas/FinancialEntryCategorySchema"
+},
+"title": "Financialentrycategories",
+"type": "array"
+}
+},
+"required": [
+"financialEntryCategories"
+],
+"title": "FinancialEntryCategoryCollectionSchema",
+"type": "object"
+},
+"FinancialEntryCategorySchema": {
+"properties": {
+"id": {
+"description": "ID da categoria da movimentação financeira.",
+"title": "Id",
+"type": "integer"
+},
+"name": {
+"description": "Nome da categoria da movimentação financeira.",
+"title": "Name",
+"type": "string"
+}
+},
+"required": [
+"id",
+"name"
+],
+"title": "FinancialEntryCategorySchema",
+"type": "object"
+},
+"FinancialEntryCollectionSchema": {
+"properties": {
+"financialEntries": {
+"description": "Lista de movimentações financeiras.",
+"items": {
+"$ref": "#/components/schemas/FinancialEntrySchema"
+},
+"title": "Financialentries",
+"type": "array"
+}
+},
+"required": [
+"financialEntries"
+],
+"title": "FinancialEntryCollectionSchema",
+"type": "object"
+},
+"FinancialEntryDelSchema": {
+"properties": {
+"message": {
+"description": "Mensagem de retorno do processamento.",
+"title": "Message",
+"type": "integer"
+}
+},
+"required": [
+"message"
+],
+"title": "FinancialEntryDelSchema",
+"type": "object"
+},
+"FinancialEntrySchema": {
+"properties": {
+"credit_card_desc": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Nome descritivo do cartão de cŕedito.",
+"title": "Credit Card Desc"
+},
+"credit_card_number": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Número do cartão de crédito",
+"title": "Credit Card Number"
+},
+"description": {
+"description": "Descritivo da movimentação financeira.",
+"title": "Description",
+"type": "string"
+},
+"entry_type_id": {
+"description": "ID do tipo de movimentação financeira, 1 para RECEITA, 2 para DESPESA e 3 para RESERVA",
+"title": "Entry Type Id",
+"type": "integer"
+},
+"entry_type_name": {
+"description": "Tipo de movimentação financeira",
+"title": "Entry Type Name",
+"type": "string"
+},
+"financial_entry_category_id": {
+"description": "ID da categoria da Movimentação Financeira.",
+"title": "Financial Entry Category Id",
+"type": "integer"
+},
+"financial_entry_category_name": {
+"description": "Nome da categoria da movimentação financeira",
+"title": "Financial Entry Category Name",
+"type": "string"
+},
+"finish_date": {
+"anyOf": [
+{
+"format": "date",
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Data fim da movimentação financeira, para as recorrentes com data de término.",
+"title": "Finish Date"
+},
+"id": {
+"description": "ID da Movimentação Financeira.",
+"title": "Id",
+"type": "integer"
+},
+"name": {
+"description": "Nome designado para a movimentação financeira",
+"title": "Name",
+"type": "string"
+},
+"recurrent": {
+"description": "1 para movimentações recorrentes, 0 pra não recorrentes",
+"title": "Recurrent",
+"type": "integer"
+},
+"recurrent_desc": {
+"description": "Descrição de recorrencia.",
+"title": "Recurrent Desc",
+"type": "string"
+},
+"start_date": {
+"description": "Data da movimentação financeira.",
+"format": "date",
+"title": "Start Date",
+"type": "string"
+},
+"value": {
+"anyOf": [
+{
+"type": "number"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Valor da movimentação financeira, movimentacoes com valor variavel podem não ter valor estipulado neste campo.",
+"title": "Value"
+},
+"value_type_id": {
+"description": "ID do tipo de valor, 1 para FIXO 2 para VARIAVEL",
+"title": "Value Type Id",
+"type": "integer"
+},
+"value_type_name": {
+"description": "Descritivo da tipo de valor da movimentação financeira",
+"title": "Value Type Name",
+"type": "string"
+}
+},
+"required": [
+"id",
+"name",
+"entry_type_id",
+"entry_type_name",
+"recurrent",
+"recurrent_desc",
+"start_date",
+"financial_entry_category_id",
+"financial_entry_category_name",
+"value_type_id",
+"value_type_name",
+"description"
+],
+"title": "FinancialEntrySchema",
+"type": "object"
+},
+"FinancialEntrySchemaToDelete": {
+"properties": {
+"id": {
+"description": "ID da Movimentação Financeira que se deseja excluir.",
+"title": "Id",
+"type": "integer"
+}
+},
+"required": [
+"id"
+],
+"title": "FinancialEntrySchemaToDelete",
+"type": "object"
+},
+"FinancialEntrySchemaToInsert": {
+"properties": {
+"credit_card_number": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Número do cartão de crédito",
+"title": "Credit Card Number"
+},
+"entry_type_id": {
+"description": "ID do tipo de movimentação financeira, 1 para RECEITA, 2 para DESPESA e 3 para RESERVA",
+"title": "Entry Type Id",
+"type": "integer"
+},
+"financial_entry_category_id": {
+"description": "ID da categoria de movimentação financeira",
+"title": "Financial Entry Category Id",
+"type": "integer"
+},
+"finish_date": {
+"anyOf": [
+{
+"format": "date",
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Data fim da Movimentação para movimentações recorrentes com data de término.",
+"title": "Finish Date"
+},
+"name": {
+"description": "Nome designado para a movimentação financeira",
+"maxLength": 256,
+"title": "Name",
+"type": "string"
+},
+"recurrent": {
+"description": "1 para movimentações recorrentes, 0 pra não recorrentes",
+"title": "Recurrent",
+"type": "integer"
+},
+"start_date": {
+"description": "Data da Movimentação",
+"format": "date",
+"title": "Start Date",
+"type": "string"
+},
+"value": {
+"anyOf": [
+{
+"type": "number"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Valor da movimentação financeira",
+"title": "Value"
+},
+"value_type_id": {
+"description": "ID do tipo de valor, 1 para FIXO 2 para VARIAVEL",
+"title": "Value Type Id",
+"type": "integer"
+}
+},
+"required": [
+"name",
+"entry_type_id",
+"recurrent",
+"start_date",
+"financial_entry_category_id",
+"value_type_id"
+],
+"title": "FinancialEntrySchemaToInsert",
+"type": "object"
+},
+"FinancialEntrySchemaToUpdate": {
+"properties": {
+"credit_card_number": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Número do cartão de crédito a ser alterado da movimentação financeira, -1 se deseja limpar o campo.",
+"title": "Credit Card Number"
+},
+"financial_entry_category_id": {
+"anyOf": [
+{
+"type": "integer"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "ID da categoria a ser alterada da movimentação financeira",
+"title": "Financial Entry Category Id"
+},
+"finish_date": {
+"anyOf": [
+{
+"format": "date",
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Data Fim a ser alterada da Movimentação",
+"title": "Finish Date"
+},
+"id": {
+"description": "ID da Movimentação Financeira que se deseja alterar.",
+"title": "Id",
+"type": "integer"
+},
+"name": {
+"description": "Nome a ser alterado para a movimentação financeira",
+"maxLength": 256,
+"title": "Name",
+"type": "string"
+},
+"start_date": {
+"anyOf": [
+{
+"format": "date",
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Data a ser alterada da Movimentação",
+"title": "Start Date"
+},
+"value": {
+"anyOf": [
+{
+"type": "number"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "Valor a ser alterado da movimentação financeira",
+"title": "Value"
+}
+},
+"required": [
+"id",
+"name"
+],
+"title": "FinancialEntrySchemaToUpdate",
+"type": "object"
+},
+"ValidationErrorModel": {
+"properties": {
+"ctx": {
+"anyOf": [
+{
+"type": "object"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "an optional object which contains values required to render the error message.",
+"title": "Error context"
+},
+"loc": {
+"anyOf": [
+{
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "the error's location as a list. ",
+"title": "Location"
+},
+"msg": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "a computer-readable identifier of the error type.",
+"title": "Message"
+},
+"type_": {
+"anyOf": [
+{
+"type": "string"
+},
+{
+"type": "null"
+}
+],
+"default": null,
+"description": "a human readable explanation of the error.",
+"title": "Error Type"
+}
+},
+"title": "ValidationErrorModel",
+"type": "object"
+}
+},
+"securitySchemes": null
+},
+"info": {
+"title": "Personal Financial Control",
+"version": "1.0.0"
+},
+"openapi": "3.1.0",
+"paths": {
+"/": {
+"get": {
+"description": "Redireciona para /openapi, tela que permite a escolha do estilo de documentação.",
+"operationId": "home__get",
+"responses": {},
+"summary": "OpenApi Home",
+"tags": [
+"Documentação"
+]
+}
+},
+"/creditCard": {
+"delete": {
+"operationId": "deleteCreditCardData_creditCard_delete",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardSchemaToDelete"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardDelSchema"
+}
+}
+},
+"description": "OK"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Excluir cartão de crédito",
+"tags": [
+"Cartões de Crédito"
+]
+},
+"get": {
+"operationId": "searchCreditCards_creditCard_get",
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardCollectionSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter cartões de crédito",
+"tags": [
+"Cartões de Crédito"
+]
+},
+"patch": {
+"operationId": "updateCreditCardData_creditCard_patch",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardSchemaToUpdate"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardSchema"
+}
+}
+},
+"description": "OK"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Atualizar cartão de crédito",
+"tags": [
+"Cartões de Crédito"
+]
+},
+"post": {
+"operationId": "insertNewCreditCard_creditCard_post",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardSchemaToInsert"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardSchema"
+}
+}
+},
+"description": "OK"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Salvar Cartão de Crédito",
+"tags": [
+"Cartões de Crédito"
+]
+}
+},
+"/creditCard/": {
+"get": {
+"operationId": "searchCreditCardByGivenNumber_creditCard__get",
+"parameters": [
+{
+"description": "Número do cartão de crédito para procurar.",
+"in": "query",
+"name": "number",
+"required": true,
+"schema": {
+"description": "Número do cartão de crédito para procurar.",
+"title": "Number",
+"type": "integer"
+}
+}
+],
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter cartões de crédito pelo número",
+"tags": [
+"Cartões de Crédito"
+]
+}
+},
+"/creditCardFlag": {
+"get": {
+"operationId": "searchAllCreditCardFlagsData_creditCardFlag_get",
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/CreditCardFlagCollectionSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter as bandeiras de cartão disponiveis",
+"tags": [
+"Operações Auxiliares"
+]
+}
+},
+"/financialControl": {
+"get": {
+"operationId": "searchFinancialControls_financialControl_get",
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialControlCollectionSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter controles mensais criados",
+"tags": [
+"Controle Mensal"
+]
+},
+"patch": {
+"operationId": "updateFinancialControlEntryData_financialControl_patch",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/FinancialControlEntrySchemaToUpdate"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Atualizar a movimentação de um controle mensal",
+"tags": [
+"Controle Mensal"
+]
+},
+"post": {
+"operationId": "insertNewFinancialControlMonth_financialControl_post",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/FinancialControlSchemaToInsert"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Criar novo controle mensal",
+"tags": [
+"Controle Mensal"
+]
+}
+},
+"/financialControl/": {
+"get": {
+"operationId": "searchAllFinancialControlEntries_financialControl__get",
+"parameters": [
+{
+"description": "Mês de referencia do Controle Financeiro que deseja busca.",
+"in": "query",
+"name": "month",
+"required": true,
+"schema": {
+"description": "Mês de referencia do Controle Financeiro que deseja busca.",
+"title": "Month",
+"type": "integer"
+}
+},
+{
+"description": "Ano de referencia do Controle Financeiro que deseja busca.",
+"in": "query",
+"name": "year",
+"required": true,
+"schema": {
+"description": "Ano de referencia do Controle Financeiro que deseja busca.",
+"title": "Year",
+"type": "integer"
+}
+}
+],
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialControlEntryCollectionSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter as Movimentações respectivas a um controle mensal",
+"tags": [
+"Controle Mensal"
+]
+}
+},
+"/financialControl/summary/": {
+"get": {
+"operationId": "searchFinancialControlSummaryData_financialControl_summary__get",
+"parameters": [
+{
+"description": "Mês de referencia do Controle Financeiro que deseja busca.",
+"in": "query",
+"name": "month",
+"required": true,
+"schema": {
+"description": "Mês de referencia do Controle Financeiro que deseja busca.",
+"title": "Month",
+"type": "integer"
+}
+},
+{
+"description": "Ano de referencia do Controle Financeiro que deseja busca.",
+"in": "query",
+"name": "year",
+"required": true,
+"schema": {
+"description": "Ano de referencia do Controle Financeiro que deseja busca.",
+"title": "Year",
+"type": "integer"
+}
+}
+],
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialControlSummarySchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter o resumo de um controle mensal",
+"tags": [
+"Controle Mensal"
+]
+}
+},
+"/financialControlCategory": {
+"get": {
+"operationId": "searchAllFinancialControlCategoriesData_financialControlCategory_get",
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntryCategoryCollectionSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter as categorias de movimentação disponiveis",
+"tags": [
+"Operações Auxiliares"
+]
+}
+},
+"/financialControlCategory/": {
+"get": {
+"operationId": "searchAllFinancialControlCategoriesByEntryTypeId_financialControlCategory__get",
+"parameters": [
+{
+"description": "ID do tipo de movimentação financeira para buscar respectivas categorias, 1 para RECEITA, 2 para DESPESA e 3 para RESERVA",
+"in": "query",
+"name": "entry_type_id",
+"required": true,
+"schema": {
+"description": "ID do tipo de movimentação financeira para buscar respectivas categorias, 1 para RECEITA, 2 para DESPESA e 3 para RESERVA",
+"title": "Entry Type Id",
+"type": "integer"
+}
+}
+],
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntryCategoryCollectionSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter as categorias por tipo de movimentação",
+"tags": [
+"Operações Auxiliares"
+]
+}
+},
+"/financialEntry": {
+"delete": {
+"operationId": "deleteFinancialEntryData_financialEntry_delete",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntrySchemaToDelete"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntryDelSchema"
+}
+}
+},
+"description": "OK"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Excluir Movimentação Financeira",
+"tags": [
+"Movimentações Financeiras"
+]
+},
+"patch": {
+"operationId": "updateFinancialEntryData_financialEntry_patch",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntrySchemaToUpdate"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntrySchema"
+}
+}
+},
+"description": "OK"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Atualizar Movimentação Financeira",
+"tags": [
+"Movimentações Financeiras"
+]
+},
+"post": {
+"operationId": "insertNewFinancialEntry_financialEntry_post",
+"requestBody": {
+"content": {
+"multipart/form-data": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntrySchemaToInsert"
+}
+}
+},
+"required": true
+},
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntrySchema"
+}
+}
+},
+"description": "OK"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Salvar Nova Movimentação Financeira",
+"tags": [
+"Movimentações Financeiras"
+]
+}
+},
+"/financialEntry/": {
+"get": {
+"operationId": "searchFinancialEntries_financialEntry__get",
+"parameters": [
+{
+"description": "ID do tipo de movimentação financeira a ser procurada, 1 para RECEITA, 2 para DESPESA e 3 para RESERVA",
+"in": "query",
+"name": "entry_type_id",
+"required": true,
+"schema": {
+"description": "ID do tipo de movimentação financeira a ser procurada, 1 para RECEITA, 2 para DESPESA e 3 para RESERVA",
+"title": "Entry Type Id",
+"type": "integer"
+}
+}
+],
+"responses": {
+"200": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/FinancialEntryCollectionSchema"
+}
+}
+},
+"description": "OK"
+},
+"204": {
+"description": "No Content"
+},
+"400": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Bad Request"
+},
+"422": {
+"content": {
+"application/json": {
+"schema": {
+"items": {
+"$ref": "#/components/schemas/ValidationErrorModel"
+},
+"type": "array"
+}
+}
+},
+"description": "Unprocessable Entity"
+},
+"500": {
+"content": {
+"application/json": {
+"schema": {
+"$ref": "#/components/schemas/ErrorSchema"
+}
+}
+},
+"description": "Internal Server Error"
+}
+},
+"summary": "Obter movimentações filtradas por tipo",
+"tags": [
+"Movimentações Financeiras"
+]
+}
+}
+},
+"tags": [
+{
+"description": "Seleção de documentação: Swagger, Redoc ou RapiDoc",
+"name": "Documentação"
+},
+{
+"description": "Adição, visualização e remoção de movimentações financeiras à base",
+"name": "Movimentações Financeiras"
+},
+{
+"description": "Adição, visualização e remoção de cartões de crédito à base",
+"name": "Cartões de Crédito"
+},
+{
+"description": "Adição, visualização e remoção de controle mensal à base",
+"name": "Controle Mensal"
+},
+{
+"description": "Consulta de cadastros na base de dados",
+"name": "Operações Auxiliares"
+}
+]
+}

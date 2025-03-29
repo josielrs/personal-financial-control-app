@@ -9,15 +9,15 @@ from datetime import date
 class FinancialControlEntry(Base):
     __tablename__: str = 'FINANCIAL_CONTROL_ENTRY'
 
-    financial_control_month: int = sa.Column(sa.Numeric(2), nullable=False)
-    financial_control_year: int = sa.Column(sa.Numeric(4), nullable=False)
+    financial_control_month: int = sa.Column(sa.Integer, nullable=False)
+    financial_control_year: int = sa.Column(sa.Integer, nullable=False)
 
-    financial_entry_id: int = sa.Column(sa.Numeric(16), sa.ForeignKey('FINANCIAL_ENTRY.id'), nullable=False)
+    financial_entry_id: int = sa.Column(sa.Integer, sa.ForeignKey('FINANCIAL_ENTRY.id'), nullable=False)
     financial_entry: orm.Mapped[FinancialEntry] = orm.relationship('FinancialEntry',lazy='joined')
 
-    value: float = sa.Column(sa.DECIMAL(16,4),nullable=True)
+    value: float = sa.Column(sa.DECIMAL(16,2),nullable=True)
     entry_date: date = sa.Column(sa.Date,nullable=False)
 
     __mapper_args__ = {
-        "primary_key":[financial_control_month, financial_control_year]
+        "primary_key":[financial_control_month, financial_control_year, financial_entry_id]
     }    

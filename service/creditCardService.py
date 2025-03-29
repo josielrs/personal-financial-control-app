@@ -73,7 +73,7 @@ def validateCreditCardData(name: str,
                      year: int, 
                      creditFlagId: int,
                      update: bool) -> None:    
-    if (not name):
+    if (not name and not update):
         raise BusinessRulesException('O nome do cartão deve ser informado !!')
     
     if (not number):
@@ -86,21 +86,22 @@ def validateCreditCardData(name: str,
     if ( existingCreditCard and not update):
         raise BusinessRulesException(f'Cartão de crédito de numero {number} já existe na base de dados.')    
     
-    if (not month):
+    if (not month and not update):
         raise BusinessRulesException('O mês de validade do cartão deve ser informado !!')
     
-    if (month < 1 or month > 12):
+    if (month and ( month < 1 or month > 12 )):
         raise BusinessRulesException('O mês de validade do cartão está inválido !!')
     
-    if (not year):
+    if (not year and not update):
         raise BusinessRulesException('O ano de validade do cartão deve ser informado !!')
     
-    if (year < 1900 or year > 2999):
+    if (year and ( year < 1900 or year > 2999 )):
         raise BusinessRulesException('O ano de validade do cartão está inválido !!')
     
-    if (not creditFlagId):
+    if (not creditFlagId and not update):
         raise BusinessRulesException('A bandeira do cartão deve ser informada !!')
     
-    creditCardFlag: CreditCardFlag = searchCreditCardFlagById(creditFlagId)
-    if (not creditCardFlag):
-        raise BusinessRulesException('A bandeira do cartão não encontrada !!')
+    if (creditFlagId):
+        creditCardFlag: CreditCardFlag = searchCreditCardFlagById(creditFlagId)
+        if (not creditCardFlag):
+            raise BusinessRulesException('A bandeira do cartão não encontrada !!')

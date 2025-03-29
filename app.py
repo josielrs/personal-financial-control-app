@@ -136,7 +136,7 @@ def updateFinancialEntryData(form:FinancialEntrySchemaToUpdate):
         
         logger.info(f'[updateFinancialEntryData] - financial entry data received {form} !!') 
         
-        financialEntry: FinancialEntry = updateFinancialEntry(form.id,None,None,None,form.start_date,form.finish_date,form.value,form.financial_entry_category_id,None,form.credit_card_id)
+        financialEntry: FinancialEntry = updateFinancialEntry(form.id,form.name,None,None,form.start_date,form.finish_date,form.value,form.financial_entry_category_id,None,form.credit_card_number)
 
         if (not financialEntry):
             raise Exception('Movimentação não retornada!')

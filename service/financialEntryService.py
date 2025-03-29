@@ -43,7 +43,7 @@ def __insertFinancialEntryData__(name:str,
                                 valueTypeId:int,
                                 creditCardNumber:int) -> int :
     
-    validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber, False)
+    validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber, False, None, None)
         
     id: int = insertFinancialEntryRep(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber)
 
@@ -128,7 +128,7 @@ def searchAllFinancialEntryByGivenMonthAndYear(month:int, year:int) -> List[Fina
     if (year < 1900 or year > 2999):
         raise BusinessRulesException('O ano informado para consulta, está inválido !!')    
 
-    return searchAllFinancialEntryByDates(date(year,month,1),pd.Period('01-'+month+'-'+year,freq='M').end_time.date())
+    return searchAllFinancialEntryByDates(date(year,month,1),pd.Period(year=year,month=month,day=1,freq='M').end_time.date())
 
 
 def updateFinancialEntry(id:int,
@@ -154,8 +154,8 @@ def updateFinancialEntry(id:int,
     isFixValueChanged: bool = (value and (ValueType.FIXO.value == existingFinancialEntry.value_type_id) and (value != existingFinancialEntry.value))
 
     # Se o tipo de movimentacao tiver valor fixo ou teve alteração de dia nas datas de inicio e fim, procura os controles mensais e atualiza os dados
-    if ( isFixValueChanged or (startDate != existingFinancialEntry.start_date)):
-        financialEntries: List[FinancialControlEntry] = searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId(startDate.month,startDate.year,id)
+    if ( isFixValueChanged or ( startDate and (startDate != existingFinancialEntry.start_date) )):
+        financialEntries: List[FinancialControlEntry] = searchAllFinancialControlEntryByInitialMonthAndYearAndEntryId(existingFinancialEntry.start_date.month,existingFinancialEntry.start_date.year,id)
         if (financialEntries and len(financialEntries)>0):
             for financialEntry in financialEntries:
                 newValue: float = value if isFixValueChanged else financialEntry.value
@@ -277,7 +277,7 @@ def validateFinancialEntryData(name:str,
     if (valueTypeId and ValueType.FIXO.value == valueTypeId and not value and not isUpdate):
         raise BusinessRulesException('A movimentação financeira com valor fixo deve ter um valor informado já no cadastro !')
     
-    if (creditCardNumber):
+    if (creditCardNumber and not(isUpdate and creditCardNumber == -1)):
 
         if (not EntryType.DESPESA.value == entryTypeId):
             raise BusinessRulesException('Cartão de crédito deve ser informado apenas em movimentações de DESPESA !')
@@ -290,12 +290,12 @@ def validateFinancialEntryData(name:str,
 def buildFinancialControl(month: int, 
                            year: int) -> None:
     
-    insertFinancialControl(month,year,ControlStatus.ABERTO)
+    insertFinancialControl(month,year,ControlStatus.ABERTO.value)
 
     financialEntries:List[FinancialEntry] = searchAllFinancialEntryByGivenMonthAndYear(month,year)
 
     if (financialEntries and len(financialEntries)>0):
 
         for financialEntry in financialEntries:
-            financialEntryDay:int = financialEntry.start_date.day()
+            financialEntryDay:int = financialEntry.start_date.day
             insertFinancialControlEntry(month,year,financialEntry.id,financialEntry.value,date(year,month,financialEntryDay))

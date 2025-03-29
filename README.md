@@ -28,7 +28,9 @@ Classes que representam as operações e a implementação das regras de negóci
 
 Classes que representam as operações de manipulação de dados no banco de dados
 
+## api_json.json
 
+Arquivo JSON da API para importar no POSTMAN.
 
 # COMO EXECUTAR
 
