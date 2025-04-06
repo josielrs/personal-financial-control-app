@@ -39,7 +39,7 @@ class FinancialEntry(Base):
 
 
     def __str__(self):
-        return f'[{'-' if not self.financial_entry_category else self.financial_entry_category.name}] - {self.name} - {self.id}'
+        return f'[{'-' if not self.financial_entry_category else self.financial_entry_category.name}] - {self.name}'
     
     
     def returnMonthNumber(self):

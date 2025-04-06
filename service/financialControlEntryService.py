@@ -57,7 +57,7 @@ def deleteFinancialControlEntry(month: int,
 def deleteAllFinancialControlEntriesByMonthAndYear(month: int, 
                                                     year: int) -> None:      
     
-    deleteAllFinancialControlEntriesByMonthAndYear(month,year)
+    deleteAllFinancialControlEntriesByMonthAndYearRep(month,year)
 
 
 def validateFinancialControlEntryDate(month: int, 

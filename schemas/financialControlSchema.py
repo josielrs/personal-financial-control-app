@@ -1,5 +1,6 @@
 from datetime import date
 from model.financial_control import FinancialControl
+from model.financial_control import financialControlDescription
 from model.financial_control_entry import FinancialControlEntry
 from model.financial_entry import FinancialEntry
 from pydantic import BaseModel, Field
@@ -95,7 +96,7 @@ def showFinancialControl(financialControl: FinancialControl) -> FinancialControl
     
     return {"month":financialControl.month,
             "year":financialControl.year,
-            "description":financialControl.description}
+            "description":financialControlDescription(financialControl)}
 
 
 def showFinancialControlEntries(financialControlEntry: FinancialControlEntry) -> FinancialControlEntrySchema:

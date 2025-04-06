@@ -62,7 +62,7 @@ def deleteCreditCard(number: int):
         raise RuntimeError(f'Cartão de crédito de numero {number} não existe na base de dados.')
     
     if (hasFinancialEntriesWithCreditCard(number) > 0):
-        raise RuntimeError(f'Cartão de crédito de numero {number} está associado a movimentações financeiras.')
+        raise BusinessRulesException(f'Cartão de crédito de numero {number} está associado a movimentações financeiras.')
 
     deleteCreditCardRep(number)
 

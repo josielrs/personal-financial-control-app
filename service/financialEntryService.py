@@ -43,13 +43,16 @@ def __insertFinancialEntryData__(name:str,
                                 valueTypeId:int,
                                 creditCardNumber:int) -> int :
     
+    if (not recurrent):
+        recurrent = 0
+
     validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber, False, None, None)
         
     id: int = insertFinancialEntryRep(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber)
 
     # inserindo a movimentação dos controles mensais já criados
     financialControls: List[FinancialControl] = searchFinancialControlByInitialMonthAndYear(startDate.month,startDate.year)
-    if (financialControls and len(financialControls)>0):
+    if (financialControls and (len(financialControls)>0)):
         for financialControl in financialControls:
             insertFinancialControlEntry(financialControl.month,financialControl.year,id,value,date(financialControl.year,financialControl.month,startDate.day))
 
@@ -145,6 +148,9 @@ def updateFinancialEntry(id:int,
     if (not id):
         raise BusinessRulesException('ID da Movimentação Financeira deve ser informado.')
     
+    if (not recurrent):
+        recurrent = 0    
+    
     existingFinancialEntry : FinancialEntry = searchFinancialEntryById(id)
 
     validateFinancialEntryData(name, entryTypeId, recurrent, startDate, finishDate, value, financialEntryCategoryId, valueTypeId, creditCardNumber, True, existingFinancialEntry, id)
@@ -215,9 +221,6 @@ def validateFinancialEntryData(name:str,
     if (entryTypeId and isUpdate and entryTypeId != financialEntry.entry_type_id):
         raise BusinessRulesException('Não é permitido mudar o tipo da movimentação financeira !')
     
-    if (not recurrent and not isUpdate):
-        raise BusinessRulesException('Informar a recorrencia da movimentação financeira !')   
-
     if (recurrent and not (recurrent == 0 or recurrent == 1)):
         raise BusinessRulesException('O parametro "recurrent" deve ser 0 (não) ou 1 (sim) !!')
 

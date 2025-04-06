@@ -29,7 +29,7 @@ def searchFinancialControlByInitialMonthAndYear(month: int, year: int) -> List[F
 
     Session = create_session()
     with Session() as session:
-        return session.query(FinancialControl).filter(FinancialControl.year >= year).filter(FinancialControl.month >= month).first()
+        return session.query(FinancialControl).filter(FinancialControl.year >= year).filter(FinancialControl.month >= month).all()
 
 
 def searchAllFinancialControl() -> List[FinancialControl]:
@@ -84,7 +84,7 @@ def searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month:int,year:int,entryTy
 
     Session = create_session()
     with Session() as session:
-        result = session.execute(text(f'SELECT SUM(FCE.VALUE) FROM FINANCIAL_ENTRY FE, FINANCIAL_CONTROL_ENTRY FCE WHERE FCE.FINANCIAL_CONTROL_MONTH = {month} AND FCE.FINANCIAL_CONTROL_YEAR = {year} AND FE.ID = FCE.FINANCIAL_ENTRY_ID AND FE.VALUE IS NOT NULL AND FE.ENTRY_TYPE_ID = {entryTypeId}'))
+        result = session.execute(text(f'SELECT SUM(FCE.VALUE) FROM FINANCIAL_ENTRY FE, FINANCIAL_CONTROL_ENTRY FCE WHERE FCE.FINANCIAL_CONTROL_MONTH = {month} AND FCE.FINANCIAL_CONTROL_YEAR = {year} AND FE.ID = FCE.FINANCIAL_ENTRY_ID AND FE.ENTRY_TYPE_ID = {entryTypeId}'))
         if (result):
             for elem in result:
                 if (elem[0]):

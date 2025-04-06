@@ -16,15 +16,15 @@ months = {
     12: "DEZEMBRO"
 }
 
-def financialControlDescription(m:int,y:int) -> str:
-        return f'{months.get(m)}/{y}'
+def financialControlDescription(this) -> str:
+    return f'{months.get(this.month)}/{this.year}'
 
 class FinancialControl(Base):
     __tablename__: str = 'FINANCIAL_CONTROL'
 
     month: int = sa.Column(sa.Integer, primary_key=True, nullable=False)
     year: int = sa.Column(sa.Integer, primary_key=True, nullable=False)
-    description: str = sa.Column(sa.String(4000),default=financialControlDescription(month,year))
+    description: str = sa.Column(sa.String(4000),default="Controle Mensal")
     status: str = sa.Column(sa.String(256), nullable=False)
 
     __mapper_args__ = {

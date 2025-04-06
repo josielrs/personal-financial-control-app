@@ -66,15 +66,15 @@ def home():
 
 @app.post('/financialEntry', summary="Salvar Nova Movimentação Financeira", tags=[entry_tag],
           responses={"200": FinancialEntrySchema, "400": ErrorSchema, "500": ErrorSchema})
-def insertNewFinancialEntry(form:FinancialEntrySchemaToInsert):
+def insertNewFinancialEntry(body:FinancialEntrySchemaToInsert):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de entrada não foram informados')
         
-        logger.info(f'[insertNewFinancialEntry] - financial entry data received {form} !!')    
+        logger.info(f'[insertNewFinancialEntry] - financial entry data received {body} !!')    
         
-        financialEntry: FinancialEntry = insertFinancialEntry(form.name,form.entry_type_id,form.recurrent,form.start_date,form.finish_date,form.value,form.financial_entry_category_id,form.value_type_id,form.credit_card_number)
+        financialEntry: FinancialEntry = insertFinancialEntry(body.name,body.entry_type_id,body.recurrent,body.start_date,body.finish_date,body.value,body.financial_entry_category_id,body.value_type_id,body.credit_card_number)
 
         if (not financialEntry):
             raise Exception('Movimentação não retornada!')
@@ -128,15 +128,15 @@ def searchFinancialEntries(query:FinancialEntrySchemaToSearch):
 
 @app.patch('/financialEntry', summary="Atualizar Movimentação Financeira", tags=[entry_tag],
           responses={"200": FinancialEntrySchema, "400": ErrorSchema, "500": ErrorSchema})
-def updateFinancialEntryData(form:FinancialEntrySchemaToUpdate):
+def updateFinancialEntryData(body:FinancialEntrySchemaToUpdate):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de atualização não foram informados')
         
-        logger.info(f'[updateFinancialEntryData] - financial entry data received {form} !!') 
+        logger.info(f'[updateFinancialEntryData] - financial entry data received {body} !!') 
         
-        financialEntry: FinancialEntry = updateFinancialEntry(form.id,form.name,None,None,form.start_date,form.finish_date,form.value,form.financial_entry_category_id,None,form.credit_card_number)
+        financialEntry: FinancialEntry = updateFinancialEntry(body.id,body.name,None,None,body.start_date,body.finish_date,body.value,body.financial_entry_category_id,None,body.credit_card_number)
 
         if (not financialEntry):
             raise Exception('Movimentação não retornada!')
@@ -156,17 +156,17 @@ def updateFinancialEntryData(form:FinancialEntrySchemaToUpdate):
 
 @app.delete('/financialEntry', summary="Excluir Movimentação Financeira", tags=[entry_tag],
           responses={"200": FinancialEntryDelSchema, "400": ErrorSchema, "500": ErrorSchema})
-def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
+def deleteFinancialEntryData(body:FinancialEntrySchemaToDelete):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de exclusão não foram informados')
         
-        logger.info(f'[deleteFinancialEntryData] - financial entry data received {form} !!') 
+        logger.info(f'[deleteFinancialEntryData] - financial entry data received {body} !!') 
         
-        deleteFinancialEntryById(form.id)
+        deleteFinancialEntryById(body.id)
 
-        logger.info(f'[deleteFinancialEntryData] - deleted financial entry {form.id} !!') 
+        logger.info(f'[deleteFinancialEntryData] - deleted financial entry {body.id} !!') 
 
         return {"message":"Entrada excluida com sucesso."}, 200
 
@@ -183,15 +183,15 @@ def deleteFinancialEntryData(form:FinancialEntrySchemaToDelete):
 
 @app.post('/creditCard', summary="Salvar Cartão de Crédito", tags=[credit_card_tag],
           responses={"200": CreditCardSchema, "400": ErrorSchema, "500": ErrorSchema})
-def insertNewCreditCard(form:CreditCardSchemaToInsert):
+def insertNewCreditCard(body:CreditCardSchemaToInsert):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de entrada não foram informados')
         
-        logger.info(f'[insertNewCreditCard] - credit data received {form} !!')    
+        logger.info(f'[insertNewCreditCard] - credit data received {body} !!')    
         
-        creditCard: CreditCard = insertCreditCard(form.name,form.number,form.valid_month_date,form.valid_year_date,form.credit_card_flag_id)
+        creditCard: CreditCard = insertCreditCard(body.name,body.number,body.valid_month_date,body.valid_year_date,body.credit_card_flag_id)
 
         if (not creditCard):
             raise Exception('Cartão de crédito não retornado!')
@@ -269,15 +269,15 @@ def searchCreditCardByGivenNumber(query:CreditCardSchemaToSearch):
 
 @app.patch('/creditCard', summary="Atualizar cartão de crédito",  tags=[credit_card_tag],
           responses={"200": CreditCardSchema, "400": ErrorSchema, "500": ErrorSchema})
-def updateCreditCardData(form:CreditCardSchemaToUpdate):
+def updateCreditCardData(body:CreditCardSchemaToUpdate):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de atualização não foram informados')
         
-        logger.info(f'[updateCreditCardData] - credit card data received {form} !!') 
+        logger.info(f'[updateCreditCardData] - credit card data received {body} !!') 
         
-        creditCard: CreditCard = updateCreditCard(form.name,form.number,form.valid_month_date,form.valid_year_date,form.credit_card_flag_id)
+        creditCard: CreditCard = updateCreditCard(body.name,body.number,body.valid_month_date,body.valid_year_date,body.credit_card_flag_id)
 
         if (not creditCard):
             raise Exception('Cartão de Credito não retornado!')
@@ -297,17 +297,17 @@ def updateCreditCardData(form:CreditCardSchemaToUpdate):
 
 @app.delete('/creditCard', summary="Excluir cartão de crédito",  tags=[credit_card_tag],
           responses={"200": CreditCardDelSchema, "400": ErrorSchema, "500": ErrorSchema})
-def deleteCreditCardData(form:CreditCardSchemaToDelete):
+def deleteCreditCardData(body:CreditCardSchemaToDelete):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de exclusão não foram informados')
         
-        logger.info(f'[deleteCreditCardData] - credit card data received {form} !!') 
+        logger.info(f'[deleteCreditCardData] - credit card data received {body} !!') 
         
-        deleteCreditCard(form.number)
+        deleteCreditCard(body.number)
 
-        logger.info(f'[deleteCreditCardData] - credit card id {form.number} !!') 
+        logger.info(f'[deleteCreditCardData] - credit card id {body.number} !!') 
 
         return {"message":"Entrada excluida com sucesso."}, 200
 
@@ -326,15 +326,15 @@ def deleteCreditCardData(form:CreditCardSchemaToDelete):
 
 @app.post('/financialControl', summary="Criar novo controle mensal", tags=[financial_control_tag],
           responses={"200": None, "400": ErrorSchema, "500": ErrorSchema, "204": None})
-def insertNewFinancialControlMonth(form:FinancialControlSchemaToInsert):
+def insertNewFinancialControlMonth(body:FinancialControlSchemaToInsert):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de entrada não foram informados')
         
-        logger.info(f'[insertNewFinancialControlMonth] - financial control data received {form} !!')    
+        logger.info(f'[insertNewFinancialControlMonth] - financial control data received {body} !!')    
         
-        buildFinancialControl(form.month,form.year)
+        buildFinancialControl(body.month,body.year)
 
         logger.info(f'[insertNewFinancialControlMonth] - control created !!')
 
@@ -439,15 +439,15 @@ def searchFinancialControlSummaryData(query:FinancialControlSchemaToSearch):
 
 @app.patch('/financialControl', summary="Atualizar a movimentação de um controle mensal", tags=[financial_control_tag],
           responses={"200": None, "400": ErrorSchema, "500": ErrorSchema, "204": None})
-def updateFinancialControlEntryData(form:FinancialControlEntrySchemaToUpdate):
+def updateFinancialControlEntryData(body:FinancialControlEntrySchemaToUpdate):
 
     try:
-        if (not form):
+        if (not body):
             raise BusinessRulesException('Dados de atualização não foram informados')
         
-        logger.info(f'[updateFinancialControlEntryData] - financial control entry data received {form} !!') 
+        logger.info(f'[updateFinancialControlEntryData] - financial control entry data received {body} !!') 
         
-        updateFinancialControlEntry(form.month,form.year,form.financialEntryId,form.value,None)
+        updateFinancialControlEntry(body.month,body.year,body.financialEntryId,body.value,None)
       
         logger.info(f'[updateFinancialControlEntryData] - updated !!') 
 
