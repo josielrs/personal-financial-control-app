@@ -290,6 +290,10 @@ def validateFinancialEntryData(name:str,
             raise BusinessRulesException('Cartão de crédito informado não encontrado !') 
         
 
+""" 
+buildFinancialControl, busca as movimentacões que compoem o mes informado
+"""        
+
 def buildFinancialControl(month: int, 
                            year: int) -> None:
     

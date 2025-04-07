@@ -4,35 +4,38 @@ Este projeto é um backend de uma aplicação cujo propósito é auxiliar o usu�
 
 
 
-# ARQUIVOS
+## ARQUIVOS
 
-Segue abaixo uma descrição resumida da estrutura do projeto
+Segue abaixo uma descrição da estrutura do projeto
 
-## database
+### database
 
-Arquivos referente à base de dados da apliacação
+Arquivos referente à base de dados da aplicação, aqui você encontra o arquivo da base de dados, o DER e o script de montagem da base.
 
-## model
+### model
 
-Classes que representam os modelos de dados manipulados pela aplicação.
+Classes que representam os modelos de dados manipulados pela aplicação. Cada classe representa uma tabela do banco de dados e se torna um objeto da aplicação.
 
-## schemas
+### schemas
 
-Classes que representam os dados de entrada e saida da aplicação
+Classes que representam os dados de entrada e saida da API do sistema.
 
-## services
+### services
 
-Classes que representam as operações e a implementação das regras de negócio
+Classes que implementam todas as operações que serão realizadas em cima dos objetos da aplicação, elas implementam as regras de negócio
 
-## repository
+### repository
 
-Classes que representam as operações de manipulação de dados no banco de dados
+Classes que implementam as operações de manipulação de dados no banco de dados
 
-## api_json.json
+### api_json.json
 
 Arquivo JSON da API para importar no POSTMAN.
 
-# COMO EXECUTAR
+
+
+
+## COMO EXECUTAR
 
 
 Será necessário ter todas as libs python listadas no `requirements.txt` instaladas.
@@ -63,7 +66,8 @@ Abra o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador para ve
 
 
 
-# DOCUMENTAÇÕES
+
+## DOCUMENTAÇÕES
 
 Segue abaixo a documentação deste projeto
 
@@ -71,7 +75,41 @@ Segue abaixo a documentação deste projeto
 
 Segue abaixo o diagrama entidade e relacionamento do projeto
 
-![Diagrama de Entidade e Relacionamento](image.png)
+![Diagrama de Entidade e Relacionamento](./database/DER.png)
+
+### FINANCIAL_CONTROL
+
+Nessa tabela terá os meses controlados pelo usuário, em próximas versões ela terá features adicionais onde o usuário poderá abrir, fechar, simular sua finanças dentro de cada mês e ano desejados, de forma a manter o controle mensal das finanças do usuário mês a mês
+
+### FINANCIAL_CONTROL_ENTRY
+
+Nesta tabela o usuário associará as movimentações financeiras ao controle mensal, podendo dar à movimentação caracteristicas específicas dentro do respectivo mes e ano de controle
+
+### FINANCIAL_ENTRY
+
+Nesta tabela conterá as movimentações financeiras de RECEITA, RESERVA e DESPESAS
+
+### CREDIT_CARD
+
+Tabela com os cartões de crédito do usuário
+
+### FINANCIAL_ENTRY_CATEGORY
+
+Tabela com o cadastro de categorias para as movimentações
+
+### ENTRY_TYPE
+
+Tabela auxiliar com o tipo de movimentação RECEITA, RESERVA ou DESPESA
+
+### VALUE_TYPE
+
+Tabela auxiliar com o tipo de valor possivel para movimentação, FIXO ou VARIAVEL
+
+### CREDIT_CARD_FLAG
+
+Tabela auxiliar com as bandeiras de cartão disponiveis no sistema.
+
+
 
 ## API Documentation - SWAGGER
 

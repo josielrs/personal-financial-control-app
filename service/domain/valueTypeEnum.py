@@ -1,5 +1,12 @@
 from enum import Enum
 
+"""
+ValueType
+
+Objetivo: Determinar o dominio de valores para o tipo de valor na movimentação financeira na FINANCIAL_ENTRY, FIXO ou VARIAVEL
+
+"""
+
 class ValueType(Enum):
     FIXO = 1
     VARIAVEL = 2
