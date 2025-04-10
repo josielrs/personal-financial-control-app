@@ -43,7 +43,6 @@ from model.credit_card_flag import CreditCardFlag
 
 information = Info(title="Personal Financial Control", version="1.0.0")
 app = OpenAPI(__name__, info=information)
-app.config['DEBUG'] = True
 CORS(app)
 
 
