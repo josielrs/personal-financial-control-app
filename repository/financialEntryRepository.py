@@ -1,7 +1,8 @@
 from conf.db_session import create_session
 from sqlalchemy.sql import text
-from sqlalchemy import or_ 
+from sqlalchemy import or_
 from sqlalchemy import and_
+from sqlalchemy import null
 from model.financial_entry import FinancialEntry
 from typing import List
 from datetime import date
@@ -77,16 +78,7 @@ def searchAllFinancialEntryByDates(startDate:date, finishDate:date) -> List[Fina
 
     Session = create_session()
     with Session() as session:
-        query = session.query(FinancialEntry)
-
-        if startDate:
-            query.filter(FinancialEntry.start_date >= startDate)
-
-        """ este método retorna as entradas que inicial na data informada e terminam na data informa ou simplemente n tem data fim informada e são recorrentes """
-        if finishDate:
-            query.filter(or_(FinancialEntry.finish_date <= finishDate,and_(FinancialEntry.finish_date is None, FinancialEntry.recurrent == 1)))     
-
-        return query.all()
+        return session.query(FinancialEntry).filter(or_(and_(FinancialEntry.recurrent == 0,FinancialEntry.start_date >= startDate,FinancialEntry.start_date <= finishDate),and_(FinancialEntry.recurrent == 1,FinancialEntry.start_date >= startDate),and_(FinancialEntry.recurrent == 1,FinancialEntry.finish_date <= finishDate),and_(FinancialEntry.recurrent == 1,FinancialEntry.start_date <= startDate,FinancialEntry.finish_date.is_(None)))).all()
 
 
 def updateFinancialEntry(id:int,

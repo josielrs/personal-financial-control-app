@@ -29,14 +29,14 @@ def searchFinancialControlByInitialMonthAndYear(month: int, year: int) -> List[F
 
     Session = create_session()
     with Session() as session:
-        return session.query(FinancialControl).filter(FinancialControl.year >= year).filter(FinancialControl.month >= month).all()
+        return session.query(FinancialControl).filter(FinancialControl.year >= year).filter(FinancialControl.month >= month).order_by(FinancialControl.month.asc(),FinancialControl.year.asc()).all()
 
 
 def searchAllFinancialControl() -> List[FinancialControl]:
 
     Session = create_session()
     with Session() as session:
-        return session.query(FinancialControl).all()
+        return session.query(FinancialControl).order_by(FinancialControl.month.asc(),FinancialControl.year.asc()).all()
 
 
 def searchAllFinancialControlWithNoEntries() -> List[FinancialControl]:
