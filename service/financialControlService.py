@@ -36,6 +36,17 @@ def insertFinancialControl(month: int,
     return searchFinancialControlByMonthAndYear(month,year)
 
 
+def getReservesPercent(revenue:float,reserves:float) -> int:
+    if (not revenue or revenue <= 0):
+        return 0
+    if (not reserves or reserves <= 0):
+        return 0
+    if (reserves >= revenue):
+        return 100
+    
+    return (reserves*100)/revenue
+
+
 def searchFinancialControlSummary(month: int, year: int) -> FinancialControlSummary:
 
     if (not month):
@@ -44,10 +55,15 @@ def searchFinancialControlSummary(month: int, year: int) -> FinancialControlSumm
         raise BusinessRulesException('Ano do controle mensal deve ser informado !')  
 
     financialControlSummary: FinancialControlSummary = FinancialControlSummary()
+    financialControl: FinancialControl = searchFinancialControlByMonthAndYear(month,year)
+    if (financialControl):
+        financialControlSummary.description = financialControl.description
+
     financialControlSummary.revenueAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RECEITA.value)
     financialControlSummary.expensesAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.DESPESA.value)
     financialControlSummary.reservesAmount = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RESERVA.value)
     financialControlSummary.difference = financialControlSummary.revenueAmout - (financialControlSummary.expensesAmout + financialControlSummary.reservesAmount)
+    financialControlSummary.reservesPercent = getReservesPercent(financialControlSummary.revenueAmout, financialControlSummary.reservesAmount)
 
     return financialControlSummary
 

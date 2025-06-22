@@ -1,6 +1,7 @@
 from repository.financialEntryRepository import insertFinancialEntry as insertFinancialEntryRep
 from repository.financialEntryRepository import searchFinancialEntryById as searchFinancialEntryByIdRep
 from repository.financialEntryRepository import searchAllFinancialEntry as searchAllFinancialEntryRep
+from repository.financialEntryRepository import searchAllLastFinancialEntry as searchAllLastFinancialEntryRep
 from repository.financialEntryRepository import searchAllFinancialEntryByDates as searchAllFinancialEntryByDatesRep
 from repository.financialEntryRepository import searchAllFinancialEntryByType as searchAllFinancialEntryByTypeRep
 from repository.financialEntryRepository import updateFinancialEntry as updateFinancialEntryRep
@@ -97,6 +98,11 @@ def insertFinancialEntryByObject(financialEntry: FinancialEntry) -> FinancialEnt
 def searchAllFinancialEntry() -> List[FinancialEntry]:
 
     return searchAllFinancialEntryRep()
+
+
+def searchAllLastFinancialEntry(number:int) -> List[FinancialEntry]:
+    
+    return searchAllLastFinancialEntryRep(number)
 
 
 def searchAllFinancialEntryByType(entryTypeId:int) -> List[FinancialEntry]:

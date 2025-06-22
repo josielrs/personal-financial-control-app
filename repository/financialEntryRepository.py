@@ -7,6 +7,7 @@ from model.financial_entry import FinancialEntry
 from typing import List
 from datetime import date
 from service.exception.businessRulesException import BusinessRulesException
+from sqlalchemy import desc
 
 def getNextTableId() -> int:
 
@@ -58,6 +59,13 @@ def searchAllFinancialEntry() -> List[FinancialEntry]:
     Session = create_session()
     with Session() as session:
         return session.query(FinancialEntry).all()
+    
+    
+def searchAllLastFinancialEntry(number:int) -> List[FinancialEntry]:
+
+    Session = create_session()
+    with Session() as session:
+        return session.query(FinancialEntry).order_by(desc(FinancialEntry.id)).limit(number).all()    
 
 
 def searchAllFinancialEntryByType(entryTypeId:int) -> List[FinancialEntry]:

@@ -19,6 +19,7 @@ from service.financialEntryService import insertFinancialEntry
 from service.financialEntryService import updateFinancialEntry
 from service.financialEntryService import deleteFinancialEntryById
 from service.financialEntryService import searchAllFinancialEntryByType
+from service.financialEntryService import searchAllLastFinancialEntry
 from service.creditCardService import insertCreditCard
 from service.creditCardService import updateCreditCard
 from service.creditCardService import deleteCreditCard
@@ -99,14 +100,18 @@ def searchFinancialEntries(query:FinancialEntrySchemaToSearch):
         if (not query):
             raise BusinessRulesException('Dados de busca não foram informados')
         
-        if (not query.entry_type_id):
-            raise BusinessRulesException('ID do tipo de movimentação não foi informado')     
+        if (not query.entry_type_id and not query.last_entries):
+            raise BusinessRulesException('ID do tipo de movimentação não foi informado, ou o indicador de ultimas movimentações')     
 
         logger.info(f'[searchFinancialEntries] - financial entry data received {query} !!')    
         
         financialSchemaEntries = []
 
-        finantialEntries: List[FinancialEntry] = searchAllFinancialEntryByType(query.entry_type_id)
+        if (query.last_entries and query.last_entries == True):
+            finantialEntries: List[FinancialEntry] = searchAllLastFinancialEntry(5)
+        else:
+            finantialEntries: List[FinancialEntry] = searchAllFinancialEntryByType(query.entry_type_id)
+            
         if (finantialEntries and len(finantialEntries)>0):
             for financialEntry in finantialEntries:
                 financialSchemaEntries.append(showFinancialEntry(financialEntry))
@@ -435,6 +440,54 @@ def searchFinancialControlSummaryData(query:FinancialControlSchemaToSearch):
         logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}',exc_info=True)
         return {"message":str(e)}, 500
 
+
+@app.get('/financialControl/currentSummary/', summary="Obter o resumo do controle mensal atual", tags=[financial_control_tag],
+          responses={"200": FinancialControlSummarySchema, "400": ErrorSchema, "500": ErrorSchema, "204":None})
+def searchFinancialControlCurrentSummaryData():
+
+    try:       
+        logger.info(f'[searchFinancialControlCurrentSummaryData] - start !!') 
+        dateNow: date = date.today()
+        nowMonth: int = dateNow.month
+        nowYear: int = dateNow.year        
+        
+        financialControlSummary: FinancialControlSummary = searchFinancialControlSummary(nowMonth, nowYear)
+        if (not financialControlSummary):
+            newMonth: int = nowMonth
+            newYear: int = nowYear
+            for i in range(3):
+                newYear = (newYear - 1) if newMonth == 1 else newYear
+                newMonth = (newMonth - 1) if newMonth > 1 else 12
+                financialControlSummary: FinancialControlSummary = searchFinancialControlSummary(newMonth, newYear)
+                if (financialControlSummary):
+                    nowMonth = newMonth
+                    nowYear = newYear
+                    break   
+                
+        if (not financialControlSummary):
+            newMonth: int = nowMonth
+            newYear: int = nowYear
+            for i in range(3):
+                newYear = (newYear + 1) if newMonth == 12 else newYear
+                newMonth = (newMonth + 1) if newMonth < 12 else 1
+                financialControlSummary: FinancialControlSummary = searchFinancialControlSummary(newMonth, newYear)
+                if (financialControlSummary):
+                    nowMonth = newMonth
+                    nowYear = newYear                    
+                    break                             
+
+        if (financialControlSummary):
+            logger.info(f'[searchFinancialControlSummaryData] - financial control summary founded !!')
+            return showFinancialControlSummary(nowMonth, nowYear,financialControlSummary), 200
+        else:
+            return {}, 204
+
+    except BusinessRulesException as e:
+        logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 400
+    except Exception as e:
+        logger.error(f'[searchFinancialControlSummaryData] - failed to search financial control summary : {str(e)}',exc_info=True)
+        return {"message":str(e)}, 500
 
 
 @app.patch('/financialControl', summary="Atualizar a movimentação de um controle mensal", tags=[financial_control_tag],

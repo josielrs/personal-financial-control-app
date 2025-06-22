@@ -56,12 +56,14 @@ class FinancialControlSchema(BaseModel):
     
 
 class FinancialControlSummarySchema(BaseModel):
+    description: str = Field(description="Descritivo do Controle Financeiro.")
     month: int = Field(description="Mês de referencia do Controle Financeiro que deseja busca.")
     year: int = Field(description="Ano de referencia do Controle Financeiro que deseja busca.")
     revenueAmout: float = Field(description="Valor total de RECEITAS do mês de referencia.")
     expensesAmout: float = Field(description="Valor total de DESPESAS do mês de referencia.")
     reservesAmount: float = Field(description="Valor total de RESERVAS do mês de referencia.")
     difference: float = Field(description="Valor restante para o mês de referencia. RECEITAS - (DESPESAS + RESERVAS)")
+    reservesPercent: int = Field(description="percentual da reserva em cima das receitas")
 
     def __str__(self):
         return str(self.__dict__) 
@@ -109,13 +111,19 @@ def showFinancialControlEntries(financialControlEntry: FinancialControlEntry) ->
 
 
 def showFinancialControlSummary(month:int, year:int, financialControlSummary: FinancialControlSummary):
+    
+    financialControl: FinancialControl = FinancialControl()
+    financialControl.month = month
+    financialControl.year = year
 
-    return {"month":month,
+    return {"description":financialControlDescription(financialControl),
+            "month":month,
             "year":year,
             "revenueAmout":financialControlSummary.revenueAmout,
             "expensesAmout":financialControlSummary.expensesAmout,
             "reservesAmount":financialControlSummary.reservesAmount,
-            "difference":financialControlSummary.difference}
+            "difference":financialControlSummary.difference,
+            "reservesPercent":financialControlSummary.reservesPercent}
 
 
 class FinancialEntryDelSchema(BaseModel):

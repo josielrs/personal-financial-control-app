@@ -40,6 +40,7 @@ class FinancialEntrySchemaToUpdate(BaseModel):
 
 class FinancialEntrySchemaToSearch(BaseModel):
     entry_type_id: int = Field(description="ID do tipo de movimentação financeira a ser procurada, 1 para RECEITA, 2 para DESPESA e 3 para RESERVA")
+    last_entries: bool = Field(description="Se Informado, busca as ultimas movimentações financeiras") 
 
     def __str__(self):
         return str(self.__dict__)    
