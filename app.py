@@ -449,7 +449,8 @@ def searchFinancialControlCurrentSummaryData():
         logger.info(f'[searchFinancialControlCurrentSummaryData] - start !!') 
         dateNow: date = date.today()
         nowMonth: int = dateNow.month
-        nowYear: int = dateNow.year        
+        nowYear: int = dateNow.year     
+        
         
         financialControlSummary: FinancialControlSummary = searchFinancialControlSummary(nowMonth, nowYear)
         if (not financialControlSummary):
