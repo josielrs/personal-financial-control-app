@@ -108,7 +108,7 @@ def searchFinancialEntries(query:FinancialEntrySchemaToSearch):
         financialSchemaEntries = []
 
         if (query.last_entries and query.last_entries == True):
-            finantialEntries: List[FinancialEntry] = searchAllLastFinancialEntry(5)
+            finantialEntries: List[FinancialEntry] = searchAllLastFinancialEntry(10)
         else:
             finantialEntries: List[FinancialEntry] = searchAllFinancialEntryByType(query.entry_type_id)
             
