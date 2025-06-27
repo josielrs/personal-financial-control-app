@@ -65,7 +65,7 @@ def searchAllLastFinancialEntry(number:int) -> List[FinancialEntry]:
 
     Session = create_session()
     with Session() as session:
-        return session.query(FinancialEntry).order_by(desc(FinancialEntry.id)).limit(number).all()    
+        return session.query(FinancialEntry).order_by(desc(FinancialEntry.id)).limit(number).all()
 
 
 def searchAllFinancialEntryByType(entryTypeId:int) -> List[FinancialEntry]:
