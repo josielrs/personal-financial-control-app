@@ -144,8 +144,8 @@ def searchAllFinancialEntryByGivenMonthAndYear(month:int, year:int) -> List[Fina
     if (not year):
         raise BusinessRulesException('Ano de consulta deve ser informado !')    
     if (year < 1900 or year > 2999):
-        raise BusinessRulesException('O ano informado para consulta, está inválido !!')    
-
+        raise BusinessRulesException('O ano informado para consulta, está inválido !!')  
+    
     return searchAllFinancialEntryByDates(date(year,month,1),pd.Period(year=year,month=month,day=1,freq='M').end_time.date())
 
 

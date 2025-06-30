@@ -54,18 +54,18 @@ def searchFinancialControlSummary(month: int, year: int) -> FinancialControlSumm
     if (not year):
         raise BusinessRulesException('Ano do controle mensal deve ser informado !')  
 
-    financialControlSummary: FinancialControlSummary = FinancialControlSummary()
     financialControl: FinancialControl = searchFinancialControlByMonthAndYear(month,year)
     if (financialControl):
+        financialControlSummary: FinancialControlSummary = FinancialControlSummary()
         financialControlSummary.description = financialControl.description
-
-    financialControlSummary.revenueAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RECEITA.value)
-    financialControlSummary.expensesAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.DESPESA.value)
-    financialControlSummary.reservesAmount = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RESERVA.value)
-    financialControlSummary.difference = financialControlSummary.revenueAmout - (financialControlSummary.expensesAmout + financialControlSummary.reservesAmount)
-    financialControlSummary.reservesPercent = getReservesPercent(financialControlSummary.revenueAmout, financialControlSummary.reservesAmount)
-
-    return financialControlSummary
+        financialControlSummary.revenueAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RECEITA.value)
+        financialControlSummary.expensesAmout = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.DESPESA.value)
+        financialControlSummary.reservesAmount = searchSumaryValueOfGivenEntryTypeIdByMonthAndYear(month,year,EntryType.RESERVA.value)
+        financialControlSummary.difference = financialControlSummary.revenueAmout - (financialControlSummary.expensesAmout + financialControlSummary.reservesAmount)
+        financialControlSummary.reservesPercent = getReservesPercent(financialControlSummary.revenueAmout, financialControlSummary.reservesAmount)
+        return financialControlSummary
+    
+    return None
 
 
 def searchFinancialControlByMonthAndYear(month: int, year: int) -> FinancialControl:
