@@ -35,7 +35,7 @@ Arquivo JSON da API para importar no POSTMAN.
 
 
 
-## COMO EXECUTAR
+## COMO EXECUTAR (SEM O DOCKER)
 
 
 Será necessário ter todas as libs python listadas no `requirements.txt` instaladas.
@@ -44,6 +44,8 @@ Após clonar o repositório, é necessário ir ao diretório raiz, pelo terminal
 > É fortemente indicado o uso de ambientes virtuais do tipo [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html).
 
 ```
+python3 -m venv my_project_env
+source my_project_env/bin/activate
 (env)$ pip install -r requirements.txt
 ```
 
@@ -64,7 +66,21 @@ automaticamente após uma mudança no código fonte.
 
 Abra o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador para verificar o status da API em execução.
 
+## COMO EXECUTAR (COM O DOCKER)
 
+Após instalado o docker no seu dispositivo, execute o seguinte nesta mesma pasta deste arquivo (onde inclusive temos o nosso Dockerfile):
+
+> para criar o container do nosso projeto
+
+```
+docker build -t personal-financial-control-backend .
+```
+
+> para executar 
+
+```
+docker run -p 5000:5000 personal-financial-control-backend
+```
 
 
 ## DOCUMENTAÇÕES
